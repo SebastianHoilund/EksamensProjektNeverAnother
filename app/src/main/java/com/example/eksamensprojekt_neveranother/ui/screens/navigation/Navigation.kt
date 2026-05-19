@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -48,9 +49,11 @@ fun BottomNavBar(onTabClick: (String) -> Unit) {
                 .padding(8.dp)
         ) {
             Icon(
-                imageVector = Icons.Filled.ShoppingCart,
+                //imageVector = Icons.Filled.ShoppingCart,
+                painter = painterResource(id = R.drawable.bagicon),
                 contentDescription = "Basket",
                 tint = Color.Black,
+                modifier = Modifier.size(38.dp)
             )
 
         }
@@ -61,7 +64,7 @@ fun BottomNavBar(onTabClick: (String) -> Unit) {
                 .padding(8.dp)
         ) {
             Icon(
-                imageVector = Icons.Filled.Person, // <--- Fra Kotlins eget bibliotek
+                painter = painterResource(id = R.drawable.profileicon),
                 contentDescription = "Profil",
                 tint = Color.Black,
                 modifier = Modifier.size(36.dp)
