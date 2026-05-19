@@ -1,15 +1,39 @@
+# Built artifacts
+bin/
+gen/
+build/
+.gradle/
+
+# IDE - IntelliJ / Android Studio
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
+*.iws
+*.ipr
+out/
+
+# Android Studio - specifically for older versions or mixed setups
+.navigation/
+captures/
 .externalNativeBuild
-.cxx
+.cxx/
+
+# Local configuration file (contains path to Android SDK)
 local.properties
+
+# Log files
+*.log
+
+# Keystore files
+*.jks
+*.keystore
+*.p12
+
+# Google Services configuration file
+# google-services.json
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Secrets (if using secrets-gradle-plugin)
+secrets.properties
