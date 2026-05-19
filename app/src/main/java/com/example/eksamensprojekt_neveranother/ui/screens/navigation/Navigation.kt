@@ -1,12 +1,15 @@
 package com.example.eksamensprojekt_neveranother.ui.screens.navigation
 
-import android.R.color.black
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +28,6 @@ fun BottomNavBar(onTabClick: (String) -> Unit) {
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -37,40 +39,34 @@ fun BottomNavBar(onTabClick: (String) -> Unit) {
                 contentDescription = "Home",
                 tint = Color.Black,
             )
+        }
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .clickable { onTabClick("basket-screen") } // så der både bliver klikket på icon og tekst
+                .padding(8.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ShoppingCart,
+                contentDescription = "Basket",
+                tint = Color.Black,
+            )
+
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .clickable { onTabClick("profil-screen") } // så der både bliver klikket på icon og tekst
+                .padding(8.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Person, // <--- Fra Kotlins eget bibliotek
+                contentDescription = "Profil",
+                tint = Color.Black,
+                modifier = Modifier.size(36.dp)
+            )
 
         }
     }
 }
-/*
-        // 1. HOME (Hjerte)
-        IconButton(onClick = { onTabClick("home-screen") }) {
-            Icon(
-                contentDescription = "Home",
-                tint = black,
-                modifier = Modifier.size(36.dp)
-            )
-        }
-
-        // 3. COMMUNITY (Globus)
-        IconButton(onClick = { onTabClick("screen-3") }) {
-            Icon(
-                imageVector = Icons.Outlined.Public,
-                contentDescription = "Community",
-                tint = black,
-                modifier = Modifier.size(36.dp)
-            )
-        }
-
-        // 4. PROFILE (Person)
-        IconButton(onClick = { onTabClick("screen-4") }) {
-            Icon(
-                imageVector = Icons.Outlined.Person,
-                contentDescription = "Profile",
-                tint = black,
-                modifier = Modifier.size(36.dp)
-            )
-        }
-    }
-}
-
- */
