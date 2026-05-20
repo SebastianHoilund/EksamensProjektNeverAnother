@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 
-// Skræddersy skærm 3
+// Skræddersy skærm 1
 @Composable
-fun VolumeSelectionScreen() {
-    Text(modifier = Modifier.padding(16.dp, 32.dp), text = "VolumeSelectionScreen - screen 3")
+fun LowerMeasurementsScreen() {
+    Text(modifier = Modifier.padding(16.dp, 32.dp), text = "UpperMeasurementsScreen - screen 1")
 }
