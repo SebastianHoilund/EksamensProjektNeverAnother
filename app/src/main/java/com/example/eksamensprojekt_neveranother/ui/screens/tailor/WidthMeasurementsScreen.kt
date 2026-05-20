@@ -1,14 +1,22 @@
 package com.example.eksamensprojekt_neveranother.ui.screens.tailor
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import com.example.eksamensprojekt_neveranother.R
+import com.example.eksamensprojekt_neveranother.ui.screens.components.MeasurementTemplate
 
-
-// Skræddersy skærm 4
 @Composable
 fun WidthMeasurementsScreen() {
-    Text(modifier = Modifier.padding(16.dp, 32.dp), text = "WidthMeasurementsScreen - screen 4")
+    MeasurementTemplate(
+        title = "Brystspænd",
+        description = "Mål bredden af dit ene bryst \nfra side til side.",
+        videoResId = R.raw.video_4,
+        illustrationResId = R.drawable.bs,
+        progressResId = R.drawable.progressindicatorstep4,
+        onBackClick = {
+            // TODO: Navigate back
+        },
+        onNextClick = { value ->
+            // TODO: Save 'value' and navigate to next step
+        }
+    )
 }
