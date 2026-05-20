@@ -69,7 +69,6 @@ fun BottomNavBar(onTabClick: (String) -> Unit) {
                 tint = Color.Black,
                 modifier = Modifier.size(36.dp)
             )
-
         }
     }
 }

@@ -4,15 +4,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAnotherTheme
 import com.example.eksamensprojekt_neveranother.ui.screens.navigation.BottomNavBar
+import com.example.eksamensprojekt_neveranother.ui.theme.backgroundColor
+import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAnotherTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +28,43 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            BottomNavBar(onTabClick = {"home-screen"})
+            val navController = rememberNavController() //remember husker hvor brugeren er i appen
+
+            /*Når du trykker på tilbage-knappen, går den igennem hvert stykke papir ét ad gangen.
+                Så du skulle trykke tilbage mange gange for at komme ud af appen.
+                launchSingleTop forhindrer kun dubletter hvis den skærm allerede ligger øverst.
+                */
+
+            //forbindelse mellem Theme og Main Actitvity
+            EksamensProjektNeverAnotherTheme{
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                    .background(backgroundColor)
+                ) {
+                    // 1. NavHost styrer hvilken skærm der vises.
+                    // Modifier.weight(1f) gør, at skærmen suger alt pladsen til sig og skubber navbaren helt i bunden!
+                    NavHost(
+                        navController = navController, //controls the navigation. Fx when going from one page to another
+                        startDestination = "home-screen",
+                        modifier = Modifier.weight(1f)
+                    ){
+                        composable("home-screen") { //shows the different composable that can be navigated to
+                           // HomeScreen() //fordi vi starter på homescreen, hvilket vi også har skrevet ovenover i startdestination
+                        }
+                        composable("basket-screen") {
+                            // Erstat med jeres rigtige BasketScreen() komponent når den er klar
+                        }
+                        composable("profil-screen") {
+                            // Erstat med jeres rigtige ProfilScreen() komponent når den er klar
+                        }
+                    }
+                }
+
+            }
+
+            //BottomNavBar(onTabClick = {"home-screen"})
 
         }
     }
