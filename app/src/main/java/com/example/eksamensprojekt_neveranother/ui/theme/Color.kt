@@ -13,3 +13,11 @@ val Pink40 = Color(0xFF7D5260)
 //vores farver:
 
 val backgroundColor = Color(0xFFF2EBDB) //CosmicLatte
+
+val whiteColor = Color(0xFFFBFBFB)      // White (cards, hvide felter osv.)
+
+val blackColor = Color(0xFF393738)      // Black (mørkegrå/sorte tekst- og ikonfarve)
+
+val ctaColor = Color(0xFFFE5F00)        // CTA (orange knap-farve)
+
+val greyColor = Color(0xFFE5E5E5)

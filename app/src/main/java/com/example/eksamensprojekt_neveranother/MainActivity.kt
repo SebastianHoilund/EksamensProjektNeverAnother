@@ -17,8 +17,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.eksamensprojekt_neveranother.ui.screens.basket.BasketScreen
+import com.example.eksamensprojekt_neveranother.ui.screens.home.HomeScreen
 import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAnotherTheme
 import com.example.eksamensprojekt_neveranother.ui.screens.navigation.BottomNavBar
+import com.example.eksamensprojekt_neveranother.ui.screens.profile.ProfilScreen
 import com.example.eksamensprojekt_neveranother.ui.theme.backgroundColor
 import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAnotherTheme
 
@@ -30,10 +33,16 @@ class MainActivity : ComponentActivity() {
 
             val navController = rememberNavController() //remember husker hvor brugeren er i appen
 
-            /*Når du trykker på tilbage-knappen, går den igennem hvert stykke papir ét ad gangen.
+            /*Popstack: Når du trykker på tilbage-knappen, går den igennem hvert stykke papir ét ad gangen.
                 Så du skulle trykke tilbage mange gange for at komme ud af appen.
                 launchSingleTop forhindrer kun dubletter hvis den skærm allerede ligger øverst.
                 */
+            //Genbruglig variabel til navigation
+            val navigateTo = {rute: String ->
+                navController.navigate(rute){
+                    launchSingleTop = true
+                }
+            }
 
             //forbindelse mellem Theme og Main Actitvity
             EksamensProjektNeverAnotherTheme{
@@ -43,29 +52,37 @@ class MainActivity : ComponentActivity() {
                         .fillMaxWidth()
                     .background(backgroundColor)
                 ) {
-                    // 1. NavHost styrer hvilken skærm der vises.
-                    // Modifier.weight(1f) gør, at skærmen suger alt pladsen til sig og skubber navbaren helt i bunden!
+                    // NavHost styrer hvilken skærm der vises.
                     NavHost(
                         navController = navController, //controls the navigation. Fx when going from one page to another
                         startDestination = "home-screen",
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f) //placerer navbaren i bunden
                     ){
                         composable("home-screen") { //shows the different composable that can be navigated to
-                           // HomeScreen() //fordi vi starter på homescreen, hvilket vi også har skrevet ovenover i startdestination
+                           HomeScreen(
+                               goToBasket = { navigateTo("basket-screen") },
+                               goToProfil = { navigateTo("profil-screen") }
+                           )
                         }
                         composable("basket-screen") {
-                            // Erstat med jeres rigtige BasketScreen() komponent når den er klar
+                            BasketScreen(
+                                goToHome = { navigateTo("home-screen") },
+                                goToProfil = { navigateTo("profil-screen") }
+                            )
                         }
                         composable("profil-screen") {
-                            // Erstat med jeres rigtige ProfilScreen() komponent når den er klar
+                            ProfilScreen(
+                                goToHome = { navigateTo("home-screen") },
+                                goToProfil = { navigateTo("basket-screen") }
+                            )
                         }
                     }
+                    BottomNavBar(
+                        onTabClick = { valgtRute -> navigateTo(valgtRute) }
+                    )
                 }
-
             }
-
-            //BottomNavBar(onTabClick = {"home-screen"})
-
         }
     }
 }
+
