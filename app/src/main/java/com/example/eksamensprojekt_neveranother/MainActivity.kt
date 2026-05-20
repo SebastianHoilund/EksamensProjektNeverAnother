@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
@@ -24,6 +27,7 @@ import com.example.eksamensprojekt_neveranother.ui.screens.navigation.BottomNavB
 import com.example.eksamensprojekt_neveranother.ui.screens.profile.ProfilScreen
 import com.example.eksamensprojekt_neveranother.ui.theme.backgroundColor
 import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAnotherTheme
+import androidx.compose.runtime.setValue
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +36,8 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val navController = rememberNavController() //remember husker hvor brugeren er i appen
+            var currentScreen by remember { mutableStateOf("home-screen") }
+
 
             /*Popstack: Når du trykker på tilbage-knappen, går den igennem hvert stykke papir ét ad gangen.
                 Så du skulle trykke tilbage mange gange for at komme ud af appen.
@@ -49,14 +55,14 @@ class MainActivity : ComponentActivity() {
 
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                    .background(backgroundColor)
+                        .fillMaxSize()
+                        .background(backgroundColor)
                 ) {
                     // NavHost styrer hvilken skærm der vises.
                     NavHost(
                         navController = navController, //controls the navigation. Fx when going from one page to another
                         startDestination = "home-screen",
-                        modifier = Modifier.weight(1f) //placerer navbaren i bunden
+                        modifier = Modifier.weight(1f) //Denne vægt SKUBBER navbaren ned i bunden
                     ){
                         composable("home-screen") { //shows the different composable that can be navigated to
                            HomeScreen(
@@ -78,7 +84,9 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     BottomNavBar(
-                        onTabClick = { valgtRute -> navigateTo(valgtRute) }
+                        currentScreen = currentScreen, onTabClick = { valgtRute ->
+                            currentScreen = valgtRute //hvorfor denne???
+                            navigateTo(valgtRute) }
                     )
                 }
             }
