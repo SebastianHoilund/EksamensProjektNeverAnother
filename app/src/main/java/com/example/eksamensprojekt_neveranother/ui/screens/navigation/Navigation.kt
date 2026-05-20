@@ -50,9 +50,8 @@ fun BottomNavBar(onTabClick: (String) -> Unit) {
         ) {
             Icon(
                 //imageVector = Icons.Filled.ShoppingCart,
-                painter = painterResource(id = R.drawable.bagicon),
+                painter = painterResource(id = R.drawable.basketicon),
                 contentDescription = "Basket",
-                tint = Color.Black,
                 modifier = Modifier.size(38.dp)
             )
 
@@ -64,9 +63,8 @@ fun BottomNavBar(onTabClick: (String) -> Unit) {
                 .padding(8.dp)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.profileicon),
+                painter = painterResource(id = R.drawable.profilicon),
                 contentDescription = "Profil",
-                tint = Color.Black,
                 modifier = Modifier.size(36.dp)
             )
         }
