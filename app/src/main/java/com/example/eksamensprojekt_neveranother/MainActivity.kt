@@ -7,27 +7,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.eksamensprojekt_neveranother.ui.screens.basket.BasketScreen
-import com.example.eksamensprojekt_neveranother.ui.screens.home.HomeScreen
 import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAnotherTheme
 import com.example.eksamensprojekt_neveranother.ui.screens.navigation.BottomNavBar
-import com.example.eksamensprojekt_neveranother.ui.screens.profile.ProfilScreen
 import com.example.eksamensprojekt_neveranother.ui.theme.backgroundColor
-import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAnotherTheme
 import androidx.compose.runtime.setValue
+import com.example.eksamensprojekt_neveranother.ui.screens.navigation.AppNavigation
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,31 +47,16 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(backgroundColor)
                 ) {
+
+                    AppNavigation(
+                        navController = navController,
+                        navigateTo = navigateTo,
+                        modifier = Modifier
+                            .weight(1f) // Denne vægt SKUBBER navbaren ned i bunden
+                    )
+
                     // NavHost styrer hvilken skærm der vises.
-                    NavHost(
-                        navController = navController, //controls the navigation. Fx when going from one page to another
-                        startDestination = "home-screen",
-                        modifier = Modifier.weight(1f) //Denne vægt SKUBBER navbaren ned i bunden
-                    ){
-                        composable("home-screen") { //shows the different composable that can be navigated to
-                           HomeScreen(
-                               goToBasket = { navigateTo("basket-screen") },
-                               goToProfil = { navigateTo("profil-screen") }
-                           )
-                        }
-                        composable("basket-screen") {
-                            BasketScreen(
-                                goToHome = { navigateTo("home-screen") },
-                                goToProfil = { navigateTo("profil-screen") }
-                            )
-                        }
-                        composable("profil-screen") {
-                            ProfilScreen(
-                                goToHome = { navigateTo("home-screen") },
-                                goToProfil = { navigateTo("basket-screen") }
-                            )
-                        }
-                    }
+
                     BottomNavBar(
                         currentScreen = currentScreen, onTabClick = { valgtRute ->
                             currentScreen = valgtRute //hvorfor denne???
