@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -31,6 +32,7 @@ import com.example.eksamensprojekt_neveranother.R
 import com.example.eksamensprojekt_neveranother.ui.theme.backgroundColor
 import com.example.eksamensprojekt_neveranother.ui.theme.blackColor
 import com.example.eksamensprojekt_neveranother.ui.theme.greyColor
+import com.example.eksamensprojekt_neveranother.ui.theme.whiteColor
 
 //herinde opretter jeg min funktion og giver den parametre som jeg sender under AppNavigaiton
 
@@ -38,13 +40,13 @@ import com.example.eksamensprojekt_neveranother.ui.theme.greyColor
 fun ProfileMenuItem(itemText: String) {
     Column(
         modifier = Modifier
-            .width(250.dp) // Sætter en fast bredde på linjen, så den ligner Figma
-            .padding(vertical = 4.dp),
+            .width(210.dp) // Sætter en fast bredde på linjen, så den ligner Figma
+            .padding(vertical = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = itemText,
-            fontSize = 20.sp,
+            fontSize = 22.sp,
             color = blackColor,
             modifier = Modifier.padding(bottom = 2.dp)
         )
@@ -54,19 +56,29 @@ fun ProfileMenuItem(itemText: String) {
         )
     }
 }
-
 @Composable
 fun CustomProfileButton(itemText: String, onClick: () -> Unit) {
-        Button(
-            onClick = onClick, // 1. Nu kalder den din onClick funktion, når man trykker!
-            modifier = Modifier
-                .width(250.dp)
-                .height(40.dp)
-                .padding(vertical = 2.dp)
-        ) {
-            Text(text = itemText) // 2. Bruger den itemText, du sender med ind
-        }
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .width(205.dp)
+            .height(60.dp)
+            .padding(vertical = 10.dp),
+        colors = ButtonDefaults.buttonColors
+        (
+            containerColor = whiteColor, // Knappens baggrund bliver hvid
+            contentColor = blackColor    // Teksten bliver sort
+        ),
+        // Border skal stå her for sig selv – ikke inde i ButtonColors!
+        border = androidx.compose.foundation.BorderStroke(1.dp, greyColor)
+    ) {
+        // Alt indholdet (knappens tekst) skal stå herinde i krølparenteserne til sidst
+        Text(
+            text = itemText,
+            fontSize = 16.sp
+        )
     }
+}
 
 
 @Composable
@@ -74,21 +86,21 @@ fun ProfileScreen(goToHome: () -> Unit, goToBasket: () -> Unit) {
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .background(backgroundColor)
-            .padding(bottom = 10.dp),
+            .padding(bottom = 30.dp, start = 20.dp, end = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp, start = 20.dp, end = 20.dp)
+                    .padding(top = 60.dp)
             ) {
                 Icon(
                     painterResource(id = R.drawable.homeicon),
                     contentDescription = "Logo - gå til forside",
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(53.dp)
                         .align(Alignment.Center)
                         .clickable { goToHome() } // Gør at man kan trykke sig hjem
                 )
@@ -103,31 +115,24 @@ fun ProfileScreen(goToHome: () -> Unit, goToBasket: () -> Unit) {
             Text(
                 text = "Min profil",
                 color = blackColor,
-                fontSize = 68.sp,
+                fontSize = 36.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .padding(top = 5.dp)
+                    .padding(top = 42.dp, bottom = 20.dp)
             )
-        /*
+
             Icon(
                 painter = painterResource(id = R.drawable.profilicon),
                 contentDescription = "Profil",
                 modifier = Modifier
-                    .padding(top = 5.dp)
-                    .size(65.dp)
+                    .size(90.dp)
             )
-
-         */
             Text(
                 text = "Lisbeth",
-                fontSize = 18.sp,
+                fontSize = 24.sp,
                 color = blackColor,
                 modifier = Modifier
-                    .padding(top = 5.dp)
-            )
-            Spacer(
-                modifier = Modifier
-                    .height(10.dp)
+                    .padding(top = 15.dp, bottom = 45.dp)
             )
 
             //kalder den genanvendelige funktio
@@ -135,9 +140,11 @@ fun ProfileScreen(goToHome: () -> Unit, goToBasket: () -> Unit) {
             ProfileMenuItem("Ordre")
             ProfileMenuItem("Gavekort")
 
+        //Spacer der skubber knapperne godt ned mod bunden
         Spacer(
             modifier = Modifier
-                .height(10.dp)
+                .weight(1f)
+
         )
 
             CustomProfileButton("Vælg sprog", onClick = {})
