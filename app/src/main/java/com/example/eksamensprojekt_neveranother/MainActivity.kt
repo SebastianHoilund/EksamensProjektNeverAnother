@@ -16,7 +16,9 @@ import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAno
 import com.example.eksamensprojekt_neveranother.ui.screens.navigation.BottomNavBar
 import com.example.eksamensprojekt_neveranother.ui.theme.backgroundColor
 import androidx.compose.runtime.setValue
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.eksamensprojekt_neveranother.ui.screens.navigation.AppNavigation
+import com.example.eksamensprojekt_neveranother.ui.screens.tailor.TailorStartScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +28,12 @@ class MainActivity : ComponentActivity() {
 
             val navController = rememberNavController() //remember husker hvor brugeren er i appen
             var currentScreen by remember { mutableStateOf("home-screen") }
+
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
+
+            val showNavBarScreens = listOf("home-screen", "basket-screen", "profil-screen")
+
 
 
             /*Popstack: Når du trykker på tilbage-knappen, går den igennem hvert stykke papir ét ad gangen.
@@ -41,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
             //forbindelse mellem Theme og Main Actitvity
             EksamensProjektNeverAnotherTheme{
-
+                //TailorStartScreen(navController = navController) til test af skærddersy
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -57,11 +65,14 @@ class MainActivity : ComponentActivity() {
 
                     // NavHost styrer hvilken skærm der vises.
 
-                    BottomNavBar(
-                        currentScreen = currentScreen, onTabClick = { valgtRute ->
-                            currentScreen = valgtRute //hvorfor denne???
-                            navigateTo(valgtRute) }
-                    )
+                    if (currentRoute in showNavBarScreens) {
+                        BottomNavBar(
+                            currentScreen = currentScreen, onTabClick = { valgtRute ->
+                                currentScreen = valgtRute //hvorfor denne???
+                                navigateTo(valgtRute)
+                            }
+                        )
+                    }
                 }
             }
         }

@@ -1,11 +1,12 @@
 package com.example.eksamensprojekt_neveranother.ui.screens.tailor
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
 import com.example.eksamensprojekt_neveranother.ui.screens.components.MeasurementTemplate
 
 @Composable
-fun WidthMeasurementsScreen() {
+fun WidthMeasurementsScreen(navController: NavController) {
     MeasurementTemplate(
         title = "Brystspænd",
         description = "Mål bredden af dit ene bryst \nfra side til side.",
@@ -13,10 +14,10 @@ fun WidthMeasurementsScreen() {
         illustrationResId = R.drawable.bs,
         progressResId = R.drawable.progressindicatorstep4,
         onBackClick = {
-            // TODO: Navigate back
+            navController.popBackStack()
         },
         onNextClick = { value ->
-            // TODO: Save 'value' and navigate to next step
+            // TODO: Navigate to the next planned screen
         }
     )
 }

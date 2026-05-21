@@ -1,11 +1,12 @@
 package com.example.eksamensprojekt_neveranother.ui.screens.tailor
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
 import com.example.eksamensprojekt_neveranother.ui.screens.components.MeasurementTemplate
 
 @Composable
-fun HeightMeasurementsScreen() {
+fun HeightMeasurementsScreen(navController: NavController) {
     MeasurementTemplate(
         title = "Brysthøjde",
         description = "Mål højden af dit bryst \nfra top til bund.",
@@ -13,10 +14,10 @@ fun HeightMeasurementsScreen() {
         illustrationResId = R.drawable.bh,
         progressResId = R.drawable.progressindicatorstep3,
         onBackClick = {
-            // TODO: Navigate back
+            navController.popBackStack()
         },
         onNextClick = { value ->
-            // TODO: Save 'value' and navigate to next step
+            navController.navigate("width_measurements")
         }
     )
 }

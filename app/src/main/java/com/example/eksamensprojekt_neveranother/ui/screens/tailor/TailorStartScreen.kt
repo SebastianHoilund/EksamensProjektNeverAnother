@@ -21,10 +21,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
 
 @Composable
-fun TailorStartScreen() {
+fun TailorStartScreen(
+    navController: NavController
+){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,7 +48,7 @@ fun TailorStartScreen() {
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .size(32.dp)
-                    .clickable { /* TODO: Exit */ }
+                    .clickable { /*onExitClick()*/ }
             )
 
             Image(
@@ -54,10 +57,9 @@ fun TailorStartScreen() {
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(56.dp)
-                    .clickable { /* TODO: Home */ }
+                    .clickable { /*onHomeClick()*/ }
             )
 
-            // Using step 2 as placeholder if step 1 doesn't exist
             Image(
                 painter = painterResource(R.drawable.progressindicatorstep0),
                 contentDescription = "Progress",
@@ -115,7 +117,7 @@ fun TailorStartScreen() {
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
-            onClick = { /* TODO: Navigate to first measurement step */ },
+            onClick = { navController.navigate("upper_measurements") },
             modifier = Modifier
                 .fillMaxWidth(0.7f)
                 .height(56.dp),
