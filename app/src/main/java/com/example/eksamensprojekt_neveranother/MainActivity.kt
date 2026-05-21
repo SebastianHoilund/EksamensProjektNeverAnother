@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,14 +28,14 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController() //remember husker hvor brugeren er i appen
             var currentScreen by remember { mutableStateOf("home-screen") }
 
-
             /*Popstack: Når du trykker på tilbage-knappen, går den igennem hvert stykke papir ét ad gangen.
                 Så du skulle trykke tilbage mange gange for at komme ud af appen.
                 launchSingleTop forhindrer kun dubletter hvis den skærm allerede ligger øverst.
                 */
-            //Genbruglig variabel til navigation
-            val navigateTo = {rute: String ->
-                navController.navigate(rute){
+            //Genbruglig variabel til navigation - gør to ting: både skifter skærmen OG opdaterer din currentScreen state.
+            val navigateTo = {rute: String -> //navigateTo: Funktionen der bruger begge dele.
+                currentScreen = rute //currentScreen: Variablen der ved, hvor den orange streg skal være.
+                navController.navigate(rute){ //navController: "Motoren" der skifter skærme.
                     launchSingleTop = true
                 }
             }

@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.eksamensprojekt_neveranother.ui.screens.basket.BasketScreen
 import com.example.eksamensprojekt_neveranother.ui.screens.home.HomeScreen
-import com.example.eksamensprojekt_neveranother.ui.screens.profile.ProfilScreen
+import com.example.eksamensprojekt_neveranother.ui.screens.profile.ProfileScreen
 
 @Composable
 fun AppNavigation(
@@ -33,9 +33,9 @@ fun AppNavigation(
             )
         }
         composable("profil-screen") {
-            ProfilScreen(
+            ProfileScreen(
                 goToHome = { navigateTo("home-screen") },
-                goToBasket = { navigateTo("basket-screen") }
+                goToBasket = { navigateTo("basket-screen") },
             )
         }
     }
