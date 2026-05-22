@@ -45,7 +45,7 @@ fun BasketScreen (
 ) {
 
     val btnText = when {
-        viewModel.items.isNotEmpty() -> "check ud"
+        viewModel.items.isNotEmpty() -> "Check ud"
         isTailored -> "Se din BH"
         else -> "Skræddersy BH"
     }
@@ -213,7 +213,7 @@ fun BasketScreen (
                 .align(Alignment.CenterHorizontally)
         ) {
             Text(
-                text = btnTextEmptyOrNot,
+                text = btnText,
                 color = whiteColor,
                 fontSize = 20.sp
             )
