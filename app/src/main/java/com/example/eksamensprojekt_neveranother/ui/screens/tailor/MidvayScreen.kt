@@ -8,36 +8,27 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
-import com.example.eksamensprojekt_neveranother.data.TailorState
 
 @Composable
-fun ResultScreen(
-    navController: NavController,
-    state: TailorState
-) {
-    val volumeOptions = listOf(
-        "fast fylde i toppen",
-        "blød fylde i toppen",
-        "fast fylde i bunden",
-        "blød fylde i bunden"
-    )
-
+fun MidwayScreen(
+    navController: NavController
+){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,20 +58,18 @@ fun ResultScreen(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(56.dp)
+                    .clickable { /* TODO: Home */ }
             )
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(140.dp))
 
         Text(
-            text = buildAnnotatedString {
-                append("Her er dit ")
-                withStyle(style = SpanStyle(color = Color(0xFFFE5F00))) {
-                    append("resultat")
-                }
-            },
+            text = "Du klarer det godt!",
             fontSize = 32.sp,
-            textAlign = TextAlign.Center
+            fontWeight = FontWeight.Normal,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)
         )
 
         HorizontalDivider(
@@ -91,42 +80,21 @@ fun ResultScreen(
                 .padding(top = 12.dp)
         )
 
-        Spacer(modifier = Modifier.height(48.dp))
-
-        // Results List
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 48.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            ResultItem(label = "Øvre omkreds", value = "${state.upperCircumference} cm")
-            ResultItem(label = "Nedre omkreds", value = "${state.lowerCircumference} cm")
-            ResultItem(
-                label = "Volumn",
-                value = if (state.selectedVolume != -1) volumeOptions[state.selectedVolume] else "-"
-            )
-            ResultItem(label = "Brystspænd", value = "${state.width} cm")
-            ResultItem(label = "Brysthøjde", value = "${state.height} cm")
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "Dobbelttjek med 3D-scanner",
-            fontSize = 14.sp,
-            color = Color.Gray,
-            textDecoration = TextDecoration.Underline,
-            modifier = Modifier
-                .padding(vertical = 16.dp)
-                .clickable { /* TODO: 3D Scanner */ }
+            text = "Vi mangler kun et par mål!",
+            fontSize = 22.sp,
+            textAlign = TextAlign.Center
         )
+
+        Spacer(modifier = Modifier.weight(1f))
 
         // Bottom Buttons
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 32.dp, vertical = 24.dp),
+                .padding(horizontal = 32.dp, vertical = 32.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OutlinedButton(
@@ -142,7 +110,7 @@ fun ResultScreen(
             }
 
             Button(
-                onClick = { /* TODO: Go to product */ },
+                onClick = { navController.navigate("height_measurements") },
                 modifier = Modifier
                     .weight(1.5f)
                     .height(56.dp),
@@ -152,16 +120,8 @@ fun ResultScreen(
                     contentColor = Color.White
                 )
             ) {
-                Text(text = "Se produkt", fontSize = 18.sp)
+                Text(text = "Fortsæt", fontSize = 18.sp)
             }
         }
-    }
-}
-
-@Composable
-fun ResultItem(label: String, value: String) {
-    Column {
-        Text(text = label, fontSize = 20.sp, color = Color.Black)
-        Text(text = value, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black)
     }
 }

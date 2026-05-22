@@ -32,13 +32,14 @@ fun MeasurementTemplate(
     videoResId: Int,
     illustrationResId: Int,
     progressResId: Int,
+    initialValue: String = "0.00",
     onBackClick: () -> Unit,
     onNextClick: (String) -> Unit,
     onExitClick: () -> Unit = {},
     onHomeClick: () -> Unit = {}
 ) {
     var showIllustration by remember { mutableStateOf(true) }
-    var measurementValue by remember { mutableStateOf("0.00") }
+    var measurementValue by remember { mutableStateOf(initialValue) }
 
     Column(
         modifier = Modifier
@@ -48,7 +49,6 @@ fun MeasurementTemplate(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -103,7 +103,6 @@ fun MeasurementTemplate(
                 .width(300.dp)
         )
 
-        // Video / Illustration Box
         Box(
             modifier = Modifier
                 .width(300.dp)
@@ -152,7 +151,6 @@ fun MeasurementTemplate(
             }
         }
 
-        // Input Field
         Column(
             modifier = Modifier
                 .padding(top = 28.dp)
@@ -164,17 +162,27 @@ fun MeasurementTemplate(
                     .padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.Bottom
             ) {
-                BasicTextField(
-                    value = measurementValue,
-                    onValueChange = { measurementValue = it },
-                    textStyle = TextStyle(
-                        fontSize = 28.sp,
-                        color = Color.Gray,
-                        textAlign = TextAlign.Start
-                    ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(1f)
-                )
+                Box(modifier = Modifier.weight(1f)) {
+                    if (measurementValue.isEmpty()) {
+                        Text(
+                            text = "0.00",
+                            fontSize = 28.sp,
+                            color = Color.LightGray,
+                            textAlign = TextAlign.Start
+                        )
+                    }
+                    BasicTextField(
+                        value = measurementValue,
+                        onValueChange = { measurementValue = it },
+                        textStyle = TextStyle(
+                            fontSize = 28.sp,
+                            color = Color.Gray,
+                            textAlign = TextAlign.Start
+                        ),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
                 Text(
                     text = "cm",
                     fontSize = 28.sp,
@@ -189,7 +197,6 @@ fun MeasurementTemplate(
             )
         }
 
-        // Bottom Buttons
         Row(
             modifier = Modifier
                 .fillMaxWidth()

@@ -18,6 +18,7 @@ import com.example.eksamensprojekt_neveranother.ui.theme.backgroundColor
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.eksamensprojekt_neveranother.ui.screens.navigation.AppNavigation
+import com.example.eksamensprojekt_neveranother.ui.screens.tailor.MidwayScreen
 import com.example.eksamensprojekt_neveranother.ui.screens.tailor.TailorStartScreen
 
 class MainActivity : ComponentActivity() {
@@ -49,7 +50,6 @@ class MainActivity : ComponentActivity() {
 
             //forbindelse mellem Theme og Main Actitvity
             EksamensProjektNeverAnotherTheme{
-                //TailorStartScreen(navController = navController) til test af skærddersy
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
