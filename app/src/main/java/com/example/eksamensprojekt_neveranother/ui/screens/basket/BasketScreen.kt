@@ -186,6 +186,12 @@ fun BasketScreen (
                                 )
 
                             Spacer(modifier = Modifier.height(52.dp))
+import androidx.compose.runtime.Composable
+
+@Composable
+fun BasketScreen(goToHome: () -> Unit, goToProfil: () -> Unit) {
+
+}
 
                             Text(text = "${item.pris} kr.",
                                 color = Color.Gray,

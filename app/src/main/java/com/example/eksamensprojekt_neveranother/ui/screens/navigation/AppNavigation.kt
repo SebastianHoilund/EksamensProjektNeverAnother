@@ -1,10 +1,13 @@
 package com.example.eksamensprojekt_neveranother.ui.screens.navigation
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.eksamensprojekt_neveranother.ui.screens.basket.BasketScreen
+import com.example.eksamensprojekt_neveranother.ui.screens.home.HomeScreen
+import com.example.eksamensprojekt_neveranother.ui.screens.profile.ProfileScreen
 import com.example.eksamensprojekt_neveranother.data.TailorState
 import com.example.eksamensprojekt_neveranother.ui.screens.tailor.HeightMeasurementsScreen
 import com.example.eksamensprojekt_neveranother.ui.screens.tailor.LowerMeasurementsScreen
@@ -44,9 +47,9 @@ fun AppNavigation(
             )
         }
         composable("profil-screen") {
-            ProfilScreen(
+            ProfileScreen(
                 goToHome = { navigateTo("home-screen") },
-                goToBasket = { navigateTo("basket-screen") }
+                goToBasket = { navigateTo("basket-screen") },
             )
         }
         */

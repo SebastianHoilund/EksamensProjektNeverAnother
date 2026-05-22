@@ -89,9 +89,6 @@ fun BottomNavBar(currentScreen: String, onTabClick: (String) -> Unit) {
                 }
             )
         }
-
-
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -124,6 +121,12 @@ fun BottomNavBar(currentScreen: String, onTabClick: (String) -> Unit) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .clickable { onTabClick("basket-screen") } // så der både bliver klikket på icon og tekst
+                /* clickable: clickable er det, der "vækker" ikonet og siger:
+                "Hey, hvis nogen rører ved mig, så skal du råbe af navigateTo funktionen
+                Når clickable har opdaget trykket, tager navigateTo over.
+                Den bestemmer, hvordan vi rejser: Den fortæller appen: "Gå til basket-screen".
+
+                 */
                 ) {
 
                     Icon(
