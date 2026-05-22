@@ -40,14 +40,21 @@ import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
 @Composable
 fun BasketScreen (
     navController: NavController,
-    viewModel: CartViewModel
+    viewModel: CartViewModel,
+    isTailored: Boolean
 ) {
 
-    val btnTextEmptyOrNot = if (viewModel.items.isEmpty())
-        "Skræddersy BH" else "Check ud"
+    val btnText = when {
+        viewModel.items.isNotEmpty() -> "check ud"
+        isTailored -> "Se din BH"
+        else -> "Skræddersy BH"
+    }
 
-    val btnNavigation = if (viewModel.items.isEmpty())
-        "tailor/measurement start" else "Checkout"
+    val btnNavigation = when {
+        viewModel.items.isNotEmpty() -> "checkout"
+        isTailored -> "produkt"
+        else -> "onboarding_start"
+    }
 
     Column(
         modifier = Modifier
