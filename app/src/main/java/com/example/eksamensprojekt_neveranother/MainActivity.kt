@@ -4,12 +4,28 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.eksamensprojekt_neveranother.ui.screens.basket.BasketScreen
-import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.eksamensprojekt_neveranother.ui.screens.home.HomeScreen
+import com.example.eksamensprojekt_neveranother.ui.screens.navigation.AppNavigation
+import com.example.eksamensprojekt_neveranother.ui.screens.navigation.BottomNavBar
+import com.example.eksamensprojekt_neveranother.ui.screens.product.ProductScreen
+import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAnotherTheme
+import com.example.eksamensprojekt_neveranother.ui.theme.backgroundColor
 import com.example.eksamensprojekt_neveranother.viewmodel.BasketItem
+import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
+import com.example.eksamensprojekt_neveranother.viewmodel.ProductViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -18,28 +34,47 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            val navController = rememberNavController()
+            val navController = rememberNavController() //remember husker hvor brugeren er i appen
+            var currentScreen by remember { mutableStateOf("home-screen") }
 
-            val cartViewModel: CartViewModel = viewModel()
 
-            // MIDLERTIDIG TEST — slet efter test
-                LaunchedEffect(Unit) {
-                    cartViewModel.addItem(
-                        BasketItem(
-                            navn = "OneBra™",
-                            farve = "White",
-                            pris = "799.00",
-                            billedeRes = R.drawable.onebra_tm_white_bra_model
-                        )
+            /*Popstack: Når du trykker på tilbage-knappen, går den igennem hvert stykke papir ét ad gangen.
+                Så du skulle trykke tilbage mange gange for at komme ud af appen.
+                launchSingleTop forhindrer kun dubletter hvis den skærm allerede ligger øverst.
+                */
+            //Genbruglig variabel til navigation
+            val navigateTo = {rute: String ->
+                navController.navigate(rute){
+                    launchSingleTop = true
+                }
+            }
+
+            //forbindelse mellem Theme og Main Actitvity
+            EksamensProjektNeverAnotherTheme{
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(backgroundColor)
+                ) {
+
+                    AppNavigation(
+                        navController = navController,
+                        navigateTo = navigateTo,
+                        modifier = Modifier
+                            .weight(1f) // Denne vægt SKUBBER navbaren ned i bunden
+                    )
+
+                    // NavHost styrer hvilken skærm der vises.
+
+                    BottomNavBar(
+                        currentScreen = currentScreen, onTabClick = { valgtRute ->
+                            currentScreen = valgtRute //hvorfor denne???
+                            navigateTo(valgtRute) }
                     )
                 }
-
-
-            BasketScreen(
-                navController = navController,
-                viewModel = cartViewModel
-            )
-
+            }
         }
     }
 }
+

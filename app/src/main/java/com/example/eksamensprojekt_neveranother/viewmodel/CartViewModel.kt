@@ -1,4 +1,4 @@
-package com.example.eksamensprojekt_neveranother.viewmodel
+ package com.example.eksamensprojekt_neveranother.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
