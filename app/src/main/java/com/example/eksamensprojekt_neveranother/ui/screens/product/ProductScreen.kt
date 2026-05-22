@@ -52,6 +52,10 @@ import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
 import com.example.eksamensprojekt_neveranother.viewmodel.ProductViewModel
 
 
+// ===== PRODUCT SCREEN =====
+// isTailored: styrer knapteksten
+//   - true  → "Føj til kurv" → tilføjer vare og navigerer til kurv
+//   - false → "Skræddersy BH" → navigerer til onboarding
 @Composable
 fun ProductScreen (
     navController: NavController,
@@ -62,11 +66,11 @@ fun ProductScreen (
     val btnText = if (viewModel.isTailored) "Føj til Kurv"
     else "Skræddersy BH"
 
-    Box(
+    Box(// Box som yderste lag så knappen kan flyde oven på scrollindholdet
               modifier = Modifier
                   .fillMaxSize()
     ) {
-        LazyColumn(
+        LazyColumn(// LazyColumn med alle sektioner
             modifier = Modifier
                 .fillMaxWidth()
                 .background(backgroundColor)
@@ -77,7 +81,7 @@ fun ProductScreen (
             item { ProductDescription() }
         }
 
-        Button(
+        Button(// Fastlåst knap i bunden - flyder oven på indholdet
             onClick = {
                 if (viewModel.isTailored) {
                     cartViewModel.addItem(
@@ -116,6 +120,8 @@ fun ProductScreen (
 
 } //ProductScreen
 
+
+// ===== HEADER =====
 @Composable
 fun Header (navController: NavController) {
 
@@ -127,7 +133,7 @@ fun Header (navController: NavController) {
                 .fillMaxWidth()
                 .padding(top = 48.dp)
         ) {
-            Text(text = "x",
+            Text(text = "x",// X-tekst navigerer til homescreen
                 fontSize = 34.sp,
                 modifier = Modifier
                     .align(Alignment.CenterStart)
@@ -135,7 +141,7 @@ fun Header (navController: NavController) {
                     .clickable{navController.navigate("homescreen")}
                 )
 
-            Image(
+            Image(// Logo navigerer til homescreen ved klik
                 painter = painterResource(id = R.drawable.neveranother_a_logo),
                 contentDescription = "neverAnother A logo",
                 modifier = Modifier
@@ -152,7 +158,7 @@ fun Header (navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Text(
+        Text(// Produktnavn "OneBra™" centreret
             text = "OneBra™",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
@@ -163,7 +169,7 @@ fun Header (navController: NavController) {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Box(
+        Box(// Tynd orange streg under produktnavnet
             modifier = Modifier
                 .width(60.dp)
                 .height(2.dp)
@@ -177,9 +183,9 @@ fun Header (navController: NavController) {
 } //Header
 
 
-
+// ===== PRODUCT CAROUSEL =====
 @Composable
-fun ProductCarousel () {
+fun ProductCarousel () {// Swipebar karussel med 9 produktbilleder
     val pictures = listOf(
         R.drawable.productsitemodel1,
         R.drawable.productsitemodel2,
@@ -204,7 +210,7 @@ Spacer(modifier = Modifier.height(40.dp))
         contentPadding =
             PaddingValues (horizontal = 16.dp),
         pageSpacing = 8.dp,
-        pageSize = PageSize.Fixed(200.dp)
+        pageSize = PageSize.Fixed(200.dp)// PageSize.Fixed = fast bredde på hvert billede så man kan se flere ad gangen
 
     ) {
         page ->
@@ -218,7 +224,7 @@ Spacer(modifier = Modifier.height(40.dp))
 }
 
 
-
+// ===== COLOR SELECTION =====
 @Composable
 fun ColorSelection (viewModel: ProductViewModel) {
 
@@ -239,7 +245,7 @@ fun ColorSelection (viewModel: ProductViewModel) {
                color = blackColor,
                fontSize = 24.sp)
 
-               if (viewModel.isTailored) {
+               if (viewModel.isTailored) {// "Se dine mål" knap vises kun når isTailored == true
                    OutlinedButton(
                        onClick = {showMeasurementsPopUp = true},
                        border = BorderStroke(1.dp, ctaColor),
@@ -257,13 +263,13 @@ fun ColorSelection (viewModel: ProductViewModel) {
        Row(horizontalArrangement = Arrangement.spacedBy(8.dp),
            modifier = Modifier.padding(start = 16.dp)
            ) {
-
+// Orange ring vises rundt om valgt farve via border-farve
            Box(
                modifier = Modifier
                    .size(32.dp)
                    .border(
                        width = 2.dp,
-                        color = if (viewModel.choseColor == "White")
+                        color = if (viewModel.choseColor == "White")// Hvid cirkel = "White".
                            ctaColor
                        else
                        Color.Transparent,
@@ -273,13 +279,13 @@ fun ColorSelection (viewModel: ProductViewModel) {
                    .background(Color.White, shape = CircleShape)
                    .clickable{viewModel.choseColor = "White"}
            )
-
+// Orange ring vises rundt om valgt farve via border-farve
            Box(
                modifier = Modifier
                    .size(32.dp)
                    .border(
                        width = 2.dp,
-                           color = if (viewModel.choseColor == "Black")
+                           color = if (viewModel.choseColor == "Black")//sort cirkel = "Black"
                                ctaColor
                        else
                        Color.Transparent,
@@ -287,14 +293,16 @@ fun ColorSelection (viewModel: ProductViewModel) {
                    )
                    .padding(2.dp)
                    .background(color = blackColor, shape = CircleShape)
-                   .clickable{viewModel.choseColor = "Black"}
+                   .clickable{viewModel.choseColor = "Black"}// choseColor gemmes i ProductViewModel
            )
        }
    }//Column
 }
 
+
+// ===== PRODUCT DESCRIPTION =====
 @Composable
-fun ProductDescription () {
+fun ProductDescription () {// Produktbeskrivelse med overskrift og tekst-afsnit
 
     Column(
         modifier = Modifier
@@ -377,7 +385,7 @@ fun ProductDescription () {
             color = blackColor
         )
 
-        Spacer(modifier = Modifier.height(60.dp))
+        Spacer(modifier = Modifier.height(60.dp)) // Spacer i bunden så teksten ikke gemmes bag knappen
 
     }//column
 
