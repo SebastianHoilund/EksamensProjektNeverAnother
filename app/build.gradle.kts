@@ -64,4 +64,6 @@ dependencies {
     implementation("androidx.media3:media3-ui:1.10.1")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.material:material-icons-core:1.7.8") // importerede til iconer
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
 }
