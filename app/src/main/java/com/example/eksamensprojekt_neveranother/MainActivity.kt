@@ -24,22 +24,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            EksamensProjektNeverAnotherTheme {
-                val navController = rememberNavController()
-                val productViewModel: ProductViewModel = viewModel()
-                val cartViewModel: CartViewModel = viewModel()
-
-                productViewModel.isTailored = true
-                productViewModel.choseColor = "White"
-
-
-                ProductScreen(
-                    navController = navController,
-                    viewModel = productViewModel,
-                   cartViewModel = cartViewModel
-                )
-            }
-
         }
     }
 }
