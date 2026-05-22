@@ -47,12 +47,16 @@ import com.example.eksamensprojekt_neveranother.ui.theme.backgroundColor
 import com.example.eksamensprojekt_neveranother.ui.theme.blackColor
 import com.example.eksamensprojekt_neveranother.ui.theme.ctaColor
 import com.example.eksamensprojekt_neveranother.ui.theme.whiteColor
+import com.example.eksamensprojekt_neveranother.viewmodel.BasketItem
+import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
 import com.example.eksamensprojekt_neveranother.viewmodel.ProductViewModel
+
 
 @Composable
 fun ProductScreen (
     navController: NavController,
-    viewModel: ProductViewModel
+    viewModel: ProductViewModel,
+    cartViewModel: CartViewModel
 ) {
 
     val btnText = if (viewModel.isTailored) "Føj til Kurv"
@@ -64,20 +68,28 @@ fun ProductScreen (
     ) {
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .background(backgroundColor)
-                .padding(bottom = 80.dp)
         ) {
             item { Header(navController) }
             item { ProductCarousel() }
             item { ColorSelection(viewModel) }
-            item {  }
+            item { ProductDescription() }
         }
 
         Button(
             onClick = {
-                if (viewModel.isTailored) {}
-                else {
+                if (viewModel.isTailored) {
+                    cartViewModel.addItem(
+                        BasketItem(
+                            navn = "OneBra™",
+                            farve = viewModel.choseColor,
+                            pris = "799,00",
+                            billedeRes = R.drawable.productsitemodel1
+                        )
+                    )
+                    navController.navigate("kurv")
+                } else {
                     navController.navigate("tailorScreen")
                 }
             },
@@ -85,10 +97,11 @@ fun ProductScreen (
             shape = RoundedCornerShape(50),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .fillMaxWidth()
+                .padding(start = 48.dp, end = 48.dp)
+                .padding(bottom = 40.dp)
+                .fillMaxWidth(0.6f)
                 .height(50.dp)
-                .navigationBarsPadding()
-                .padding(bottom = 8.dp)
+
         ) {
             Text(text = btnText,
                 color = whiteColor,
@@ -106,6 +119,8 @@ fun ProductScreen (
 @Composable
 fun Header (navController: NavController) {
 
+    Spacer(modifier = Modifier.height(18.dp))
+
     Column{
         Box(
             modifier = Modifier
@@ -113,7 +128,7 @@ fun Header (navController: NavController) {
                 .padding(top = 48.dp)
         ) {
             Text(text = "x",
-                fontSize = 20.sp,
+                fontSize = 34.sp,
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(start = 16.dp)
@@ -125,27 +140,32 @@ fun Header (navController: NavController) {
                 contentDescription = "neverAnother A logo",
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .width(120.dp)
-                    .height(40.dp),
+                    .width(140.dp)
+                    .height(50.dp)
+                    .clickable{
+                        navController.navigate("home")
+                    },
                 contentScale = ContentScale.Fit
                 )
         }//Box
 
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = "OneBra™",
-            fontSize = 28.sp,
+            fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
+            color = blackColor,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
         )
 
+        Spacer(modifier = Modifier.height(12.dp))
 
         Box(
             modifier = Modifier
-                .width(50.dp)
+                .width(60.dp)
                 .height(2.dp)
                 .background(ctaColor)
                 .align(Alignment.CenterHorizontally)
@@ -174,7 +194,7 @@ fun ProductCarousel () {
 
     val carousel = rememberPagerState(pageCount = { pictures.size })
 
-
+Spacer(modifier = Modifier.height(40.dp))
 
     HorizontalPager(
         state = carousel,
@@ -216,19 +236,27 @@ fun ColorSelection (viewModel: ProductViewModel) {
            Text(
                text = "Vælg Farve",
                fontWeight = FontWeight.Bold,
-               fontSize = 18.sp)
+               color = blackColor,
+               fontSize = 24.sp)
 
                if (viewModel.isTailored) {
                    OutlinedButton(
                        onClick = {showMeasurementsPopUp = true},
-                       border = BorderStroke(1.dp, ctaColor)
+                       border = BorderStroke(1.dp, ctaColor),
+                       modifier = Modifier
+                           .fillMaxWidth(0.7f)
+                           .height(36.dp)
                    ) {
-                       Text("Se dine mål", color = ctaColor)
+                       Text("Se dine mål", color = ctaColor, fontSize = 18.sp)
                    }
                }
        }//Row
 
-       Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+
+       Row(horizontalArrangement = Arrangement.spacedBy(8.dp),
+           modifier = Modifier.padding(start = 16.dp)
+           ) {
 
            Box(
                modifier = Modifier
@@ -261,9 +289,96 @@ fun ColorSelection (viewModel: ProductViewModel) {
                    .background(color = blackColor, shape = CircleShape)
                    .clickable{viewModel.choseColor = "Black"}
            )
-
        }
-
    }//Column
+}
+
+@Composable
+fun ProductDescription () {
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(28.dp)
+    ) {
+
+        Text(
+            text = "Mød din nye yndlings-BH",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = blackColor,
+        )
+
+        Spacer(modifier = Modifier.height(18.dp))
+
+//////////////////////
+
+        Text(
+            text = "Den er skabt ved hjælp af vores specialtilpassede fit-algoritme og skræddersyet til at passe perfekt til dine mål.",
+            fontSize = 18.sp,
+            color = blackColor
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+//////////////////////
+
+        Text(
+            text = "Det brede bånd giver støtte og stabilitet, så du føler dig tryg hele dagen.",
+            fontSize = 18.sp,
+            color = blackColor
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        /////////////////
+
+
+
+        Text(
+            text = "Den bløde strikkede bøjle løfter og former skånsomt og fremhæver din silhuet uden ubehaget fra en traditionel metalbøjle.",
+            fontSize = 18.sp,
+            color = blackColor
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        /////////////////
+
+
+
+        Text(
+            text = "De dobbeltlagede skåle har et ydre lag, der giver struktur og holdbarhed, mens det indre lag er blødt og åndbart.",
+            fontSize = 18.sp,
+            color = blackColor
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        /////////////////
+
+
+
+        Text(
+            text = "Siderne og ryggen har en luftig struktur, som holder dig kølig og komfortabel.",
+            fontSize = 18.sp,
+            color = blackColor
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        /////////////////
+
+
+
+        Text(
+            text = "Har justerbare stropper og tre hægtelukninger på ryggen.",
+            fontSize = 18.sp,
+            color = blackColor
+        )
+
+        Spacer(modifier = Modifier.height(60.dp))
+
+    }//column
 
 }

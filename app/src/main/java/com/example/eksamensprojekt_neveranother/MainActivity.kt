@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.eksamensprojekt_neveranother.ui.screens.product.ProductScreen
 import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAnotherTheme
+import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
 import com.example.eksamensprojekt_neveranother.viewmodel.ProductViewModel
 
 class MainActivity : ComponentActivity() {
@@ -26,9 +27,16 @@ class MainActivity : ComponentActivity() {
             EksamensProjektNeverAnotherTheme {
                 val navController = rememberNavController()
                 val productViewModel: ProductViewModel = viewModel()
+                val cartViewModel: CartViewModel = viewModel()
+
+                productViewModel.isTailored = true
+                productViewModel.choseColor = "White"
+
+
                 ProductScreen(
                     navController = navController,
-                    viewModel = productViewModel
+                    viewModel = productViewModel,
+                   cartViewModel = cartViewModel
                 )
             }
 
