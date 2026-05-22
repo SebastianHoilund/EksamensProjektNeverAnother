@@ -20,4 +20,6 @@ val blackColor = Color(0xFF393738)      // Black (mørkegrå/sorte tekst- og iko
 
 val ctaColor = Color(0xFFFE5F00)        // CTA (orange knap-farve)
 
-val greyColor = Color(0xFF999999)
+val greyColor = Color(0xFFE5E5E5)
+
+val footerColor = Color(0xFFE8DCC8)
