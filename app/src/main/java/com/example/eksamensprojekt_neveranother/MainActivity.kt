@@ -12,6 +12,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import com.example.eksamensprojekt_neveranother.ui.screens.product.ProductScreen
+import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
+import com.example.eksamensprojekt_neveranother.viewmodel.ProductViewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.eksamensprojekt_neveranother.ui.screens.home.HomeScreen
 import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAnotherTheme
