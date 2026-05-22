@@ -24,7 +24,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -64,6 +63,9 @@ import androidx.compose.material.icons.filled.ArrowForward
 
 
 
+
+// ===== HOMESCREEN =====
+// Startskærmen - indeholder en scrollbar liste med alle sektioner
 @Composable
 fun HomeScreen (
     navController: NavController,
@@ -85,6 +87,9 @@ fun HomeScreen (
     }
 }
 
+
+// ===== HERO SECTION =====
+// isTailored: true = brugeren har lavet onboarding, knap skifter til "Se din BH"
 @OptIn(UnstableApi::class)
 @Composable
 fun HeroSection(
@@ -100,6 +105,8 @@ fun HeroSection(
     else "measurementstart"
 
 
+
+    // Video der afspilles automatisk i baggrunden på loop uden lyd
     val context = LocalContext.current
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
@@ -114,6 +121,8 @@ fun HeroSection(
             playWhenReady = true
         }
     }
+
+// ExoPlayer sættes op og frigives når screen lukkes (DisposableEffect)
     DisposableEffect(Unit) {
         onDispose { exoPlayer.release() }
     }
@@ -145,7 +154,7 @@ fun HeroSection(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Image(
+            Image(// Logo øverst i hero
                 painter = painterResource(id = R.drawable.nalogowhite700),
                 contentDescription = "NeverAnother Logo",
                 modifier = Modifier
@@ -156,7 +165,7 @@ fun HeroSection(
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            Text(
+            Text(// Titel-tekst med blandede farver (orange + hvid) via buildAnnotatedString
                 text = buildAnnotatedString {
                     withStyle(style = SpanStyle(color = ctaColor))
                     {
@@ -185,7 +194,7 @@ fun HeroSection(
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            Button(
+            Button(// CTA-knap: navigerer til onboarding eller produktside afhængigt af isTailored
                 onClick = { navController.navigate(btnRoute) },
                 colors = ButtonDefaults.buttonColors(containerColor = ctaColor),
                 shape = RoundedCornerShape(50),
@@ -202,7 +211,7 @@ fun HeroSection(
         }
     }
 }
-
+// ===== VORES PRODUKT SECTION =====
 @Composable
 fun VoresProduktSection (navController: NavController) {
 
@@ -231,7 +240,7 @@ Text(
         Spacer(modifier = Modifier.height(10.dp))
 
 //Lille Orange Streg under Vores Produkt.
-Box(
+Box(//Orange Streg
     modifier = Modifier
         .width(50.dp)
         .height(2.dp)
@@ -247,7 +256,7 @@ Box(
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-Text(
+Text(// OneBra™ er klikbar og navigerer til produktsiden
     text = "OneBra™",
 
     textDecoration = TextDecoration.Underline,
@@ -266,7 +275,7 @@ Text(
 
         Spacer(modifier = Modifier.height(14.dp))
 
-HorizontalPager(
+HorizontalPager(// HorizontalPager = swipebar billedkarussel med 5 produktbilleder
     state = pagerState,
     modifier = Modifier
         .fillMaxWidth()
@@ -288,6 +297,7 @@ HorizontalPager(
 }
 
 
+// ===== OM OS SECTION =====
 @Composable
 fun OmOsSection () {
 
@@ -306,7 +316,7 @@ fun OmOsSection () {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Box(
+        Box(//Orange Streg
             modifier = Modifier
                 .width(50.dp)
                 .height(2.dp)
@@ -316,7 +326,7 @@ fun OmOsSection () {
 
         Spacer(modifier = Modifier.height(26.dp))
 
-        Row(
+        Row(// 5 rækker med billede + tekst side om side (skifter venstre/højre)
             modifier = Modifier
                 .fillMaxWidth()
 
@@ -506,6 +516,8 @@ fun OmOsSection () {
     } //column
 }
 
+
+// ===== FOOTER =====
 @Composable
 fun Footer () {
 
@@ -539,7 +551,7 @@ fun Footer () {
 
         Spacer(modifier = Modifier.height(18.dp))
 
-      Row(
+      Row(// Email-felt til nyhedsbrev med orange send-knap
           modifier = Modifier
               .fillMaxWidth()
               .background(backgroundColor, shape = RoundedCornerShape(4.dp)),
