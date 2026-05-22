@@ -37,19 +37,28 @@ import com.example.eksamensprojekt_neveranother.ui.theme.ctaColor
 import com.example.eksamensprojekt_neveranother.ui.theme.whiteColor
 import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
 
+
+// ===== BASKET SCREEN =====
 @Composable
 fun BasketScreen (
     navController: NavController,
     viewModel: CartViewModel,
-    isTailored: Boolean
+    isTailored: Boolean // Modtager isTailored for at styre knapteksten
 ) {
 
+
+    // Knap-logik - 3 tilstande:
+// Kurv ikke tom → "Check ud" → checkout
+// Kurv tom + tailored → "Se din BH" → produkt
+// Kurv tom + ikke tailored → "Skræddersy BH" → measurement start
     val btnText = when {
         viewModel.items.isNotEmpty() -> "Check ud"
         isTailored -> "Se din BH"
         else -> "Skræddersy BH"
     }
 
+
+    //Knap navigation
     val btnNavigation = when {
         viewModel.items.isNotEmpty() -> "checkout"
         isTailored -> "produkt"
@@ -66,6 +75,8 @@ fun BasketScreen (
 
         Spacer(modifier = Modifier.height(64.dp))
 
+
+        // Logo og "Din kurv" titel vises altid øverst
         Image(painter = painterResource(id = R.drawable.neveranother_a_logo),
             contentDescription = "NeverAnother A logo",
             modifier = Modifier
@@ -95,10 +106,13 @@ fun BasketScreen (
 
         Spacer(modifier = Modifier.height(35.dp))
 
+
+        // Tom kurv: viser basketicon, "0" og en tekst
         if (viewModel.items.isEmpty()) {
 
             Column(horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
 
                 Spacer(modifier = Modifier.height(50.dp))
@@ -128,12 +142,12 @@ fun BasketScreen (
                 )
             }
 
-        } else {
+        } else { // Fyldt kurv: LazyColumn med liste af varer
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                items(viewModel.items) {
+                items(viewModel.items) { // Hvert produkt har billede, navn, farve, pris og slet-knap
                     item ->
                     Row(
                         modifier = Modifier
@@ -189,7 +203,7 @@ fun BasketScreen (
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Box(
-                            modifier = Modifier
+                            modifier = Modifier // Orange streg under hvert produkt i listen
                                 .width(250.dp)
                                 .height(2.dp)
                                 .background(ctaColor)
@@ -202,7 +216,7 @@ fun BasketScreen (
 
         Spacer(modifier = Modifier.weight(1f))
 
-
+// Knappen er altid synlig i bunden
         Button(
             onClick = {navController.navigate(btnNavigation)},
             colors = ButtonDefaults.buttonColors(containerColor = ctaColor),
