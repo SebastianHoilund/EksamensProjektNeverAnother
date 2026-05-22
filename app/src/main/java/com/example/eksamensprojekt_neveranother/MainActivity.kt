@@ -7,19 +7,31 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAnotherTheme
+import com.example.eksamensprojekt_neveranother.ui.screens.basket.BasketScreen
+import com.example.eksamensprojekt_neveranother.ui.screens.home.HomeScreen
+import com.example.eksamensprojekt_neveranother.ui.screens.navigation.AppNavigation
 import com.example.eksamensprojekt_neveranother.ui.screens.navigation.BottomNavBar
+import com.example.eksamensprojekt_neveranother.ui.screens.product.ProductScreen
+import com.example.eksamensprojekt_neveranother.ui.theme.EksamensProjektNeverAnotherTheme
 import com.example.eksamensprojekt_neveranother.ui.theme.backgroundColor
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.eksamensprojekt_neveranother.ui.screens.navigation.AppNavigation
 import com.example.eksamensprojekt_neveranother.ui.screens.tailor.MidwayScreen
 import com.example.eksamensprojekt_neveranother.ui.screens.tailor.TailorStartScreen
+import com.example.eksamensprojekt_neveranother.viewmodel.BasketItem
+import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
+import com.example.eksamensprojekt_neveranother.viewmodel.ProductViewModel
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,0 +1,24 @@
+<!--
+  ~ Copyright (C) 2026 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="71dp"
+    android:height="53dp"
+    android:viewportWidth="71"
+    android:viewportHeight="53">
+  <path
+      android:pathData="M70.663,15.841C64.13,16.131 57.597,17.925 51.897,21.07L42.152,0H34.939L46.36,24.697C45.241,25.536 44.09,26.277 42.947,27.063C41.626,28.017 40.329,28.994 39.047,29.987C36.483,29.163 33.842,28.575 31.178,28.208C21.764,26.933 7.987,27.956 1.878,36.239C-0.678,39.843 -0.616,44.843 2.01,48.523C7.191,55.455 17.432,53.325 23.393,48.95C26.065,47.034 28.49,44.79 30.977,42.652C33.657,40.285 37.086,37.201 40.321,34.392C42.877,35.4 45.287,36.751 47.434,38.491C50.368,41.011 53.141,43.767 55.604,46.721C56.214,47.469 56.84,48.286 57.404,49.126C57.967,49.966 58.439,50.828 58.848,51.729L59.079,52.248H66.308L53.62,24.819C57.836,22.376 64.879,20.803 70.656,21.147V15.841H70.663ZM35.278,32.964C31.541,35.972 27.872,38.965 24.065,41.85C20.799,44.438 16.991,46.958 12.744,47.24C9.246,47.546 5.894,45.874 5.987,42.057C6.241,36.255 16.636,33.209 21.61,32.521C26.096,31.857 30.846,31.934 35.363,32.903C35.34,32.926 35.309,32.941 35.286,32.964H35.278ZM51.813,37.033C49.303,34.842 46.484,33.079 43.48,31.705C44.136,31.163 44.762,30.636 45.364,30.163C46.198,29.46 47.079,28.819 47.967,28.17L52.23,37.384C51.99,37.186 51.813,37.033 51.813,37.033Z"
+      android:fillColor="#393738"/>
+</vector>
