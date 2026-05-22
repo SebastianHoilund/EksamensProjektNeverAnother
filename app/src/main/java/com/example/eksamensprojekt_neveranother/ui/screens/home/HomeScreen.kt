@@ -65,7 +65,10 @@ import androidx.compose.material.icons.filled.ArrowForward
 
 
 @Composable
-fun HomeScreen (navController: NavController) {
+fun HomeScreen (
+    navController: NavController,
+    isTailored: Boolean
+    ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -74,7 +77,7 @@ fun HomeScreen (navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            item {HeroSection(navController) }
+            item {HeroSection(navController, isTailored) }
             item {VoresProduktSection(navController)  }
             item {OmOsSection() }
             item { Footer() }
@@ -84,7 +87,18 @@ fun HomeScreen (navController: NavController) {
 
 @OptIn(UnstableApi::class)
 @Composable
-fun HeroSection(navController: NavController) {
+fun HeroSection(
+    navController: NavController,
+    isTailored: Boolean
+) {
+
+
+    val btnText = if (isTailored) "Se din BH"
+    else "Skræddersy BH"
+
+    val btnRoute = if (isTailored) "produkt"
+    else "measurementstart"
+
 
     val context = LocalContext.current
     val exoPlayer = remember {
@@ -172,7 +186,7 @@ fun HeroSection(navController: NavController) {
             Spacer(modifier = Modifier.height(50.dp))
 
             Button(
-                onClick = { navController.navigate("asd") },
+                onClick = { navController.navigate(btnRoute) },
                 colors = ButtonDefaults.buttonColors(containerColor = ctaColor),
                 shape = RoundedCornerShape(50),
                 modifier = Modifier
@@ -180,7 +194,7 @@ fun HeroSection(navController: NavController) {
                     .height(52.dp)
             ) {
                 Text(
-                    text = "Skræddersy BH",
+                    text = btnText,
                     color = whiteColor,
                     fontSize = 22.sp
                 )
