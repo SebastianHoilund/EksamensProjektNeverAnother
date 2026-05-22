@@ -48,7 +48,7 @@ fun TailorStartScreen(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .size(32.dp)
-                    .clickable { /*onExitClick()*/ }
+                    .clickable { navController.popBackStack() }
             )
 
             Image(
@@ -57,7 +57,9 @@ fun TailorStartScreen(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(56.dp)
-                    .clickable { /*onHomeClick()*/ }
+                    .clickable { navController.navigate("home") {
+                        popUpTo("home") { inclusive = true }
+                    } }
             )
 
             Image(

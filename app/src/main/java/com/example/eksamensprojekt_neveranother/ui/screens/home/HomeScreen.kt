@@ -101,8 +101,8 @@ fun HeroSection(
     val btnText = if (isTailored) "Se din BH"
     else "Skræddersy BH"
 
-    val btnRoute = if (isTailored) "produkt"
-    else "measurementstart"
+    val btnRoute = if (isTailored) "product"
+    else "tailor_start"
 
 
 

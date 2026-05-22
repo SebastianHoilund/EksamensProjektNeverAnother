@@ -92,9 +92,9 @@ fun ProductScreen (
                             billedeRes = R.drawable.productsitemodel1
                         )
                     )
-                    navController.navigate("kurv")
+                    navController.navigate("basket")
                 } else {
-                    navController.navigate("tailorScreen")
+                    navController.navigate("tailor_start")
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = ctaColor),
@@ -138,7 +138,7 @@ fun Header (navController: NavController) {
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(start = 16.dp)
-                    .clickable{navController.navigate("homescreen")}
+                    .clickable{navController.navigate("home")}
                 )
 
             Image(// Logo navigerer til homescreen ved klik

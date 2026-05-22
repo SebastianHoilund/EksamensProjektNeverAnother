@@ -58,7 +58,9 @@ fun MidwayScreen(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(56.dp)
-                    .clickable { /* TODO: Home */ }
+                    .clickable { navController.navigate("home") {
+                        popUpTo("home") { inclusive = true }
+                    } }
             )
         }
 

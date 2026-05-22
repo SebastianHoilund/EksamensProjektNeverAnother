@@ -64,18 +64,18 @@ fun BottomNavBar(currentScreen: String, onTabClick: (String) -> Unit) {
 
             OnCurrentScreen(
                 modifier = when (currentScreen) {
-                    "home-screen" -> Modifier
+                    "home" -> Modifier
                         .fillMaxWidth()
                         .wrapContentWidth(Alignment.Start)
                         .padding(start = 42.dp)
                         .width(60.dp)
 
-                    "basket-screen" -> Modifier
+                    "basket" -> Modifier
                         .fillMaxWidth()
                         .wrapContentWidth(Alignment.CenterHorizontally)
                         .width(60.dp)
 
-                    "profil-screen" -> Modifier
+                    "profile" -> Modifier
                         .fillMaxWidth()
                         .wrapContentWidth(Alignment.End)
                         .padding(end = 42.dp)
@@ -101,7 +101,7 @@ fun BottomNavBar(currentScreen: String, onTabClick: (String) -> Unit) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .clickable { onTabClick("home-screen") } // så der både bliver klikket på icon og tekst
+                        .clickable { onTabClick("home") } // så der både bliver klikket på icon og tekst
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.homeicon),
@@ -120,7 +120,7 @@ fun BottomNavBar(currentScreen: String, onTabClick: (String) -> Unit) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .clickable { onTabClick("basket-screen") } // så der både bliver klikket på icon og tekst
+                        .clickable { onTabClick("basket") } // så der både bliver klikket på icon og tekst
                 /* clickable: clickable er det, der "vækker" ikonet og siger:
                 "Hey, hvis nogen rører ved mig, så skal du råbe af navigateTo funktionen
                 Når clickable har opdaget trykket, tager navigateTo over.
@@ -146,7 +146,7 @@ fun BottomNavBar(currentScreen: String, onTabClick: (String) -> Unit) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .clickable { onTabClick("profil-screen") } // så der både bliver klikket på icon og tekst
+                        .clickable { onTabClick("profile") } // så der både bliver klikket på icon og tekst
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.profilicon),

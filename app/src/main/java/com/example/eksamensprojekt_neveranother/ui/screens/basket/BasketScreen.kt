@@ -61,8 +61,8 @@ fun BasketScreen (
     //Knap navigation
     val btnNavigation = when {
         viewModel.items.isNotEmpty() -> "checkout"
-        isTailored -> "produkt"
-        else -> "onboarding_start"
+        isTailored -> "product"
+        else -> "tailor_start"
     }
 
     Column(
@@ -186,12 +186,6 @@ fun BasketScreen (
                                 )
 
                             Spacer(modifier = Modifier.height(52.dp))
-import androidx.compose.runtime.Composable
-
-@Composable
-fun BasketScreen(goToHome: () -> Unit, goToProfil: () -> Unit) {
-
-}
 
                             Text(text = "${item.pris} kr.",
                                 color = Color.Gray,

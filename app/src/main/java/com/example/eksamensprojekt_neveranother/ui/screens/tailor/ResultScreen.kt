@@ -29,7 +29,8 @@ import com.example.eksamensprojekt_neveranother.data.TailorState
 @Composable
 fun ResultScreen(
     navController: NavController,
-    state: TailorState
+    state: TailorState,
+    onSeeProduct: () -> Unit = {}
 ) {
     val volumeOptions = listOf(
         "fast fylde i toppen",
@@ -67,6 +68,9 @@ fun ResultScreen(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(56.dp)
+                    .clickable { navController.navigate("home") {
+                        popUpTo("home") { inclusive = true }
+                    } }
             )
         }
 
@@ -142,7 +146,7 @@ fun ResultScreen(
             }
 
             Button(
-                onClick = { /* TODO: Go to product */ },
+                onClick = onSeeProduct,
                 modifier = Modifier
                     .weight(1.5f)
                     .height(56.dp),
