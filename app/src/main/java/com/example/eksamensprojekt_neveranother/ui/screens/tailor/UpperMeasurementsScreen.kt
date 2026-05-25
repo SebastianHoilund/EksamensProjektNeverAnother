@@ -5,11 +5,12 @@ import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
 import com.example.eksamensprojekt_neveranother.ui.components.MeasurementTemplate
 
+import com.example.eksamensprojekt_neveranother.viewmodel.MeasurementViewModel
+
 @Composable
 fun UpperMeasurementsScreen(
     navController: NavController,
-    initialValue: String,
-    onValueSaved: (String) -> Unit
+    viewModel: MeasurementViewModel
 ) {
     MeasurementTemplate(
         title = "Øvre omkreds",
@@ -17,10 +18,10 @@ fun UpperMeasurementsScreen(
         videoResId = R.raw.video_1,
         illustrationResId = R.drawable.uc,
         progressResId = R.drawable.progressindicatorstep1,
-        initialValue = initialValue,
+        initialValue = viewModel.tailorState.upperCircumference,
         onBackClick = { navController.popBackStack() },
         onNextClick = { value ->
-            onValueSaved(value)
+            viewModel.updateUpper(value)
             navController.navigate("lower_measurements")
         }
     )

@@ -51,19 +51,11 @@ fun BasketScreen (
 // Kurv ikke tom → "Check ud" → checkout
 // Kurv tom + tailored → "Se din BH" → produkt
 // Kurv tom + ikke tailored → "Skræddersy BH" → measurement start
-    val btnText = when {
-        viewModel.items.isNotEmpty() -> "Check ud"
-        isTailored -> "Se din BH"
-        else -> "Skræddersy BH"
-    }
+    val btnText = viewModel.getBtnText(isTailored)
 
 
     //Knap navigation
-    val btnNavigation = when {
-        viewModel.items.isNotEmpty() -> "checkout"
-        isTailored -> "product"
-        else -> "tailor_start"
-    }
+    val btnNavigation = viewModel.getBtnNavigation(isTailored)
 
     Column(
         modifier = Modifier

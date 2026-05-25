@@ -63,8 +63,7 @@ fun ProductScreen (
     cartViewModel: CartViewModel
 ) {
 
-    val btnText = if (viewModel.isTailored) "Føj til Kurv"
-    else "Skræddersy BH"
+    val btnText = viewModel.getBtnText()
 
     Box(// Box som yderste lag så knappen kan flyde oven på scrollindholdet
               modifier = Modifier
@@ -83,19 +82,11 @@ fun ProductScreen (
 
         Button(// Fastlåst knap i bunden - flyder oven på indholdet
             onClick = {
-                if (viewModel.isTailored) {
-                    cartViewModel.addItem(
-                        BasketItem(
-                            navn = "OneBra™",
-                            farve = viewModel.choseColor,
-                            pris = "799,00",
-                            billedeRes = R.drawable.productsitemodel1
-                        )
-                    )
-                    navController.navigate("basket")
-                } else {
-                    navController.navigate("tailor_start")
-                }
+                viewModel.onProductAction(
+                    cartViewModel = cartViewModel,
+                    navigateToBasket = { navController.navigate("basket") },
+                    navigateToTailor = { navController.navigate("tailor_start") }
+                )
             },
             colors = ButtonDefaults.buttonColors(containerColor = ctaColor),
             shape = RoundedCornerShape(50),

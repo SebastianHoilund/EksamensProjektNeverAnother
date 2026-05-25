@@ -5,11 +5,12 @@ import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
 import com.example.eksamensprojekt_neveranother.ui.components.MeasurementTemplate
 
+import com.example.eksamensprojekt_neveranother.viewmodel.MeasurementViewModel
+
 @Composable
 fun WidthMeasurementsScreen(
     navController: NavController,
-    initialValue: String,
-    onValueSaved: (String) -> Unit
+    viewModel: MeasurementViewModel
 ) {
     MeasurementTemplate(
         title = "Brystspænd",
@@ -17,12 +18,12 @@ fun WidthMeasurementsScreen(
         videoResId = R.raw.video_4,
         illustrationResId = R.drawable.bs,
         progressResId = R.drawable.progressindicatorstep4,
-        initialValue = initialValue,
+        initialValue = viewModel.tailorState.width,
         onBackClick = {
             navController.popBackStack()
         },
         onNextClick = { value ->
-            onValueSaved(value)
+            viewModel.updateWidth(value)
             navController.navigate("volume_selection")
         }
     )

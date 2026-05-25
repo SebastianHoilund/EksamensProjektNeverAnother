@@ -26,12 +26,15 @@ import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
 import com.example.eksamensprojekt_neveranother.data.TailorState
 
+import com.example.eksamensprojekt_neveranother.viewmodel.MeasurementViewModel
+
 @Composable
 fun ResultScreen(
     navController: NavController,
-    state: TailorState,
+    viewModel: MeasurementViewModel,
     onSeeProduct: () -> Unit = {}
 ) {
+    val state = viewModel.tailorState
     val volumeOptions = listOf(
         "fast fylde i toppen",
         "blød fylde i toppen",

@@ -64,12 +64,16 @@ import androidx.compose.material.icons.filled.ArrowForward
 
 
 
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.eksamensprojekt_neveranother.viewmodel.HomeViewModel
+
 // ===== HOMESCREEN =====
 // Startskærmen - indeholder en scrollbar liste med alle sektioner
 @Composable
 fun HomeScreen (
     navController: NavController,
-    isTailored: Boolean
+    isTailored: Boolean,
+    viewModel: HomeViewModel = viewModel()
     ) {
     Box(
         modifier = Modifier
@@ -82,7 +86,7 @@ fun HomeScreen (
             item {HeroSection(navController, isTailored) }
             item {VoresProduktSection(navController)  }
             item {OmOsSection() }
-            item { Footer() }
+            item { Footer(viewModel) }
         }
     }
 }
@@ -519,9 +523,7 @@ fun OmOsSection () {
 
 // ===== FOOTER =====
 @Composable
-fun Footer () {
-
-    var email by remember { mutableStateOf("") }
+fun Footer (viewModel: HomeViewModel) {
 
     Column(
         modifier = Modifier
@@ -557,12 +559,12 @@ fun Footer () {
               .background(backgroundColor, shape = RoundedCornerShape(4.dp)),
           verticalAlignment = Alignment.CenterVertically
       ) {
-          BasicTextField(value = email,
-              onValueChange = { email = it },
+          BasicTextField(value = viewModel.email,
+              onValueChange = { viewModel.onEmailChange(it) },
               modifier = Modifier
                   .weight(1f)
                   .padding(horizontal = 12.dp, vertical = 14.dp),
-              decorationBox = {innerTextField -> if (email.isEmpty()) {
+              decorationBox = {innerTextField -> if (viewModel.email.isEmpty()) {
                   Text("E-mail", color = Color.Gray)
               }
                   innerTextField()
@@ -573,7 +575,7 @@ fun Footer () {
               modifier = Modifier
                   .background(ctaColor)
                   .padding(14.dp)
-                  .clickable{}
+                  .clickable{ viewModel.onSendEmail() }
 
           ) {
               Icon(

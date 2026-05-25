@@ -1,10 +1,7 @@
 package com.example.eksamensprojekt_neveranother.ui.screens.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -13,7 +10,6 @@ import androidx.navigation.compose.composable
 import com.example.eksamensprojekt_neveranother.ui.screens.basket.BasketScreen
 import com.example.eksamensprojekt_neveranother.ui.screens.home.HomeScreen
 import com.example.eksamensprojekt_neveranother.ui.screens.profile.ProfileScreen
-import com.example.eksamensprojekt_neveranother.data.TailorState
 import com.example.eksamensprojekt_neveranother.ui.screens.product.ProductScreen
 import com.example.eksamensprojekt_neveranother.ui.screens.tailor.HeightMeasurementsScreen
 import com.example.eksamensprojekt_neveranother.ui.screens.tailor.LowerMeasurementsScreen
@@ -26,16 +22,22 @@ import com.example.eksamensprojekt_neveranother.ui.screens.tailor.VolumeSelectio
 import com.example.eksamensprojekt_neveranother.ui.screens.tailor.WidthMeasurementsScreen
 import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
 import com.example.eksamensprojekt_neveranother.viewmodel.ProductViewModel
+import com.example.eksamensprojekt_neveranother.viewmodel.MeasurementViewModel
 
 @Composable
 fun AppNavigation(
     navController: NavHostController, 
     modifier: Modifier = Modifier,
     cartViewModel: CartViewModel = viewModel(),
-    productViewModel: ProductViewModel = viewModel()
+    productViewModel: ProductViewModel = viewModel(),
+    measurementViewModel: MeasurementViewModel = viewModel()
 ) {
-    // Temporary state management without a ViewModel
-    var tailorState by remember { mutableStateOf(TailorState()) }
+    // Sync isTailored from MeasurementViewModel to ProductViewModel
+    LaunchedEffect(measurementViewModel.isTailored) {
+        if (measurementViewModel.isTailored) {
+            productViewModel.isTailored = true
+        }
+    }
 
     NavHost(
         navController = navController,
@@ -74,15 +76,13 @@ fun AppNavigation(
         composable("upper_measurements") {
             UpperMeasurementsScreen(
                 navController = navController,
-                initialValue = tailorState.upperCircumference,
-                onValueSaved = { tailorState = tailorState.copy(upperCircumference = it) }
+                viewModel = measurementViewModel
             )
         }
         composable("lower_measurements") {
             LowerMeasurementsScreen(
                 navController = navController,
-                initialValue = tailorState.lowerCircumference,
-                onValueSaved = { tailorState = tailorState.copy(lowerCircumference = it) }
+                viewModel = measurementViewModel
             )
         }
         composable("midway") {
@@ -91,22 +91,19 @@ fun AppNavigation(
         composable("height_measurements") {
             HeightMeasurementsScreen(
                 navController = navController,
-                initialValue = tailorState.height,
-                onValueSaved = { tailorState = tailorState.copy(height = it) }
+                viewModel = measurementViewModel
             )
         }
         composable("width_measurements") {
             WidthMeasurementsScreen(
                 navController = navController,
-                initialValue = tailorState.width,
-                onValueSaved = { tailorState = tailorState.copy(width = it) }
+                viewModel = measurementViewModel
             )
         }
         composable("volume_selection") {
             VolumeSelectionScreen(
                 navController = navController,
-                initialOption = tailorState.selectedVolume,
-                onOptionSaved = { tailorState = tailorState.copy(selectedVolume = it) }
+                viewModel = measurementViewModel
             )
         }
         composable("result_loading") {
@@ -115,9 +112,9 @@ fun AppNavigation(
         composable("result_screen") {
             ResultScreen(
                 navController = navController,
-                state = tailorState,
+                viewModel = measurementViewModel,
                 onSeeProduct = {
-                    productViewModel.isTailored = true
+                    measurementViewModel.completeMeasurement()
                     navController.navigate("product") {
                         popUpTo("home")
                     }

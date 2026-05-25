@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.eksamensprojekt_neveranother.R
 
 
 // ===== PRODUCT VIEW MODEL =====
@@ -21,4 +22,23 @@ class ProductViewModel : ViewModel() {
     // Styrer om "Se dine mål" knappen er synlig
     var isTailored by mutableStateOf(false)
 
+    fun getBtnText(): String {
+        return if (isTailored) "Føj til Kurv" else "Skræddersy BH"
+    }
+
+    fun onProductAction(cartViewModel: CartViewModel, navigateToBasket: () -> Unit, navigateToTailor: () -> Unit) {
+        if (isTailored) {
+            cartViewModel.addItem(
+                BasketItem(
+                    navn = "OneBra™",
+                    farve = choseColor,
+                    pris = "799,00",
+                    billedeRes = R.drawable.productsitemodel1
+                )
+            )
+            navigateToBasket()
+        } else {
+            navigateToTailor()
+        }
+    }
 }

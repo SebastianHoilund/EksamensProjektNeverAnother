@@ -26,4 +26,20 @@ class CartViewModel : ViewModel() {
         items.remove(item)
     }
 
+    fun getBtnText(isTailored: Boolean): String {
+        return when {
+            items.isNotEmpty() -> "Check ud"
+            isTailored -> "Se din BH"
+            else -> "Skræddersy BH"
+        }
+    }
+
+    fun getBtnNavigation(isTailored: Boolean): String {
+        return when {
+            items.isNotEmpty() -> "checkout"
+            isTailored -> "product"
+            else -> "tailor_start"
+        }
+    }
+
 }

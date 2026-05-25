@@ -5,11 +5,12 @@ import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
 import com.example.eksamensprojekt_neveranother.ui.components.MeasurementTemplate
 
+import com.example.eksamensprojekt_neveranother.viewmodel.MeasurementViewModel
+
 @Composable
 fun HeightMeasurementsScreen(
     navController: NavController,
-    initialValue: String,
-    onValueSaved: (String) -> Unit
+    viewModel: MeasurementViewModel
 ) {
     MeasurementTemplate(
         title = "Brysthøjde",
@@ -17,12 +18,12 @@ fun HeightMeasurementsScreen(
         videoResId = R.raw.video_3,
         illustrationResId = R.drawable.bh,
         progressResId = R.drawable.progressindicatorstep3,
-        initialValue = initialValue,
+        initialValue = viewModel.tailorState.height,
         onBackClick = {
             navController.popBackStack()
         },
         onNextClick = { value ->
-            onValueSaved(value)
+            viewModel.updateHeight(value)
             navController.navigate("width_measurements")
         }
     )
