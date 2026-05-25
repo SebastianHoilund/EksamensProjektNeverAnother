@@ -3,7 +3,7 @@ package com.example.eksamensprojekt_neveranother.ui.screens.tailor
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
-import com.example.eksamensprojekt_neveranother.ui.screens.components.MeasurementTemplate
+import com.example.eksamensprojekt_neveranother.ui.components.MeasurementTemplate
 
 @Composable
 fun HeightMeasurementsScreen(

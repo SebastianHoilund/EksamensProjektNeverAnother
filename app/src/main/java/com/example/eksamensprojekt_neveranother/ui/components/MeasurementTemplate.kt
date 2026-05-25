@@ -1,4 +1,4 @@
-package com.example.eksamensprojekt_neveranother.ui.screens.components
+package com.example.eksamensprojekt_neveranother.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

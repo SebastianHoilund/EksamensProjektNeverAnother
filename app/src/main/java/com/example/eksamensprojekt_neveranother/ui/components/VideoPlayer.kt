@@ -1,4 +1,4 @@
-package com.example.eksamensprojekt_neveranother.ui.screens.components
+package com.example.eksamensprojekt_neveranother.ui.components
 
 import android.view.LayoutInflater
 import androidx.annotation.OptIn
