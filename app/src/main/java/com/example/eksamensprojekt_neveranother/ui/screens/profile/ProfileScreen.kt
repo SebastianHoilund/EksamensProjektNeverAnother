@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,42 +36,6 @@ import com.example.eksamensprojekt_neveranother.ui.theme.blackColor
 import com.example.eksamensprojekt_neveranother.viewmodel.ProfileViewModel
 
 // ===== PROFILE SCREEN =====
-
-@Composable
-fun ProfileMenuItem(itemText: String) {
-    Column(
-        modifier = Modifier
-            .width(250.dp)
-            .padding(vertical = 4.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = itemText,
-            fontSize = 20.sp,
-            color = blackColor,
-            modifier = Modifier.padding(bottom = 2.dp)
-        )
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = blackColor
-        )
-    }
-}
-
-@Composable
-fun CustomProfileButton(itemText: String, onClick: () -> Unit) {
-    OutlinedButton(
-        onClick = onClick,
-        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFFE5F00)),
-        modifier = Modifier
-            .width(250.dp)
-            .height(40.dp)
-            .padding(vertical = 2.dp)
-    ) {
-        Text(text = itemText)
-    }
-
-}
 
 @Composable
 fun ProfileScreen(
@@ -110,7 +75,7 @@ fun ProfileScreen(
         Text(
             text = "Min profil",
             color = blackColor,
-            fontSize = 42.sp,
+            fontSize = 24.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 24.dp)
         )
@@ -118,23 +83,67 @@ fun ProfileScreen(
         // Bruger data fra ViewModel (userName)
         Text(
             text = viewModel.userName,
-            fontSize = 18.sp,
+            fontSize = 38.sp,
             color = blackColor,
             modifier = Modifier.padding(top = 8.dp)
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(82.dp))
 
         // Vi looper gennem menuItems fra ViewModel
         viewModel.menuItems.forEach { item ->
             ProfileMenuItem(item)
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
-
         // Knapper kalder nu funktioner i ViewModel
-        CustomProfileButton("Vælg sprog", onClick = { viewModel.onLanguageSelect() })
-        CustomProfileButton("Tilmeld nyhedsbrev", onClick = { viewModel.onNewsletterSignup() })
-        CustomProfileButton("Kontakt os", onClick = { viewModel.onContactUs() })
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .padding(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Bottom),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            CustomProfileButton("Vælg sprog", onClick = { viewModel.onLanguageSelect() })
+            CustomProfileButton("Tilmeld nyhedsbrev", onClick = { viewModel.onNewsletterSignup() })
+            CustomProfileButton("Kontakt os", onClick = { viewModel.onContactUs() })
+        }
+    }
+}
+
+@Composable
+fun ProfileMenuItem(itemText: String) {
+    Column(
+        modifier = Modifier
+            .width(250.dp)
+            .padding(vertical = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = itemText,
+            fontSize = 20.sp,
+            color = blackColor,
+            modifier = Modifier.padding(bottom = 2.dp)
+        )
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = blackColor
+        )
+    }
+}
+
+@Composable
+fun CustomProfileButton(itemText: String, onClick: () -> Unit) {
+    OutlinedButton(
+        onClick = onClick,
+        colors = ButtonDefaults.outlinedButtonColors(contentColor = blackColor),
+        modifier = Modifier
+            .width(250.dp)
+            .height(48.dp)
+    ) {
+        Text(
+            text = itemText,
+            fontSize = 18.sp
+        )
     }
 }
