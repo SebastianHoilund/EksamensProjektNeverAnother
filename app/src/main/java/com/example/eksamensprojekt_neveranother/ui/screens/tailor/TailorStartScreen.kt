@@ -1,5 +1,6 @@
 package com.example.eksamensprojekt_neveranother.ui.screens.tailor
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -118,28 +120,31 @@ fun TailorStartScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(
-            onClick = { navController.navigate("upper_measurements") },
+        // ===== Forsætknap =====
+        Row(
             modifier = Modifier
-                .fillMaxWidth(0.7f)
-                .height(56.dp),
-            shape = RoundedCornerShape(28.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFE5F00),
-                contentColor = Color.White
-            )
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp, vertical = 32.dp),
+            horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = "Fortsæt", fontSize = 18.sp)
+
+            Button(
+                onClick = { navController.navigate("upper_measurements") },
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(56.dp),
+                shape = RoundedCornerShape(28.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFE5F00),
+                    contentColor = Color.White
+                )
+            ) {
+                Text(text = "Fortsæt", fontSize = 18.sp)
+            }
         }
 
-        Text(
-            text = "Jeg har ikke et målebånd",
-            fontSize = 14.sp,
-            color = Color.Gray,
-            textDecoration = TextDecoration.Underline,
-            modifier = Modifier
-                .padding(top = 16.dp, bottom = 32.dp)
-                .clickable { /* TODO */ }
-        )
+
+        
+
     }
 }

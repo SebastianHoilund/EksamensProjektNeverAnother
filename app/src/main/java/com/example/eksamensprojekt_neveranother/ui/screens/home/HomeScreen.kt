@@ -190,6 +190,7 @@ fun HeroSection(
                 },
                 textAlign = TextAlign.Center,
                 fontSize = 36.sp,
+                lineHeight = 44.sp,
                 fontWeight = FontWeight.Bold
             )
 
