@@ -11,10 +11,10 @@ import com.example.eksamensprojekt_neveranother.data.BasketItem
 // Holder styr på brugerens valg på produktsiden.
 class ProductViewModel : ViewModel() {
 
-    // choseColor: gemmer den valgte farve ("White" eller "Black").
+    // chosecolor gemmer den valgte farve ("White" eller "Black").
     // Når denne ændres, opdateres UI'en automatisk (recomposition),
     // så den orange ring flytter sig til den rigtige cirkel.
-    var choseColor by mutableStateOf("")
+    var chosenColor by mutableStateOf("White")
 
 
     // isTailored: true når brugeren har gennemført measurement/måling
@@ -38,7 +38,7 @@ class ProductViewModel : ViewModel() {
             cartViewModel.addItem(
                 BasketItem(
                     navn = "OneBra™",
-                    farve = choseColor,
+                    farve = chosenColor,
                     pris = "799,00",
                     billedeRes = R.drawable.productsitemodel1
                 )
@@ -46,7 +46,7 @@ class ProductViewModel : ViewModel() {
             // Efter tilføjelse navigerer vi brugeren direkte til kurven.
             navigateToBasket()
         } else {
-            // Hvis man ikke er målt op, sendes man til starten af skrædder-flowet.
+                // Hvis man ikke er målt op, sendes man til starten af skrædder-flowet.
             navigateToTailor()
         }
     }

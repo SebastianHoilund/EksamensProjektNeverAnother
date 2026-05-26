@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -17,8 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -52,6 +55,7 @@ fun MeasurementTemplate(
     var showIllustration by remember { mutableStateOf(true) }
     // measurementValue holder styr på, hvad brugeren har skrevet i tekstfeltet lige nu.
     var measurementValue by remember { mutableStateOf(initialValue) }
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier
@@ -187,12 +191,22 @@ fun MeasurementTemplate(
                     BasicTextField(
                         value = measurementValue,
                         onValueChange = { measurementValue = it },
+                        singleLine = true,
                         textStyle = TextStyle(
                             fontSize = 28.sp,
                             color = Color.Gray,
                             textAlign = TextAlign.Start
                         ),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), // kun tal kan skrives
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ), // kun tal kan skrives, og vi tilføjer "Færdig" knap til tastaturet
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                                onNextClick(measurementValue)
+                            }
+                        ),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }

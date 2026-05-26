@@ -28,10 +28,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -74,7 +70,7 @@ fun ProductScreen (
         ) {
             item { Header(navController) }
             item { ProductCarousel() }
-            item { ColorSelection(viewModel) }
+            item { ColorSelection(viewModel, navController) }
             item { ProductDescription() }
         }
 
@@ -196,9 +192,7 @@ fun ProductCarousel () {// Swipebar karussel med 9 produktbilleder
 
 // ===== COLOR SELECTION =====
 @Composable
-fun ColorSelection (viewModel: ProductViewModel) {
-    // Lokal tilstand til at styre en popup (hvis man klikker på "Se dine mål").
-    var showMeasurementsPopUp by remember { mutableStateOf(false) }
+fun ColorSelection (viewModel: ProductViewModel, navController: NavController) {
 
    Column(modifier = Modifier.padding(16.dp)) {
        Row(
@@ -215,7 +209,7 @@ fun ColorSelection (viewModel: ProductViewModel) {
            // Denne knap vises kun, hvis brugeren har gennemført skrædder-processen.
            if (viewModel.isTailored) {
                OutlinedButton(
-                   onClick = { showMeasurementsPopUp = true },
+                   onClick = { navController.navigate("result_screen") },
                    border = BorderStroke(1.dp, ctaColor),
                    modifier = Modifier.fillMaxWidth(0.7f).height(36.dp)
                ) {
@@ -233,7 +227,7 @@ fun ColorSelection (viewModel: ProductViewModel) {
                    .size(32.dp)
                    .border(
                        width = 2.dp,
-                        color = if (viewModel.choseColor == "White")// Hvid cirkel = "White".
+                        color = if (viewModel.chosenColor == "White")// Hvid cirkel = "White".
                            ctaColor
                        else
                        Color.Transparent,
@@ -241,7 +235,7 @@ fun ColorSelection (viewModel: ProductViewModel) {
                    )
                    .padding(2.dp)
                    .background(Color.White, shape = CircleShape)
-                   .clickable{viewModel.choseColor = "White"}
+                   .clickable{viewModel.chosenColor = "White"}
            )
            // Sort cirkel
            Box(
@@ -249,7 +243,7 @@ fun ColorSelection (viewModel: ProductViewModel) {
                    .size(32.dp)
                    .border(
                        width = 2.dp,
-                           color = if (viewModel.choseColor == "Black")//sort cirkel = "Black"
+                           color = if (viewModel.chosenColor == "Black")//sort cirkel = "Black"
                                ctaColor
                        else
                        Color.Transparent,
@@ -257,7 +251,7 @@ fun ColorSelection (viewModel: ProductViewModel) {
                    )
                    .padding(2.dp)
                    .background(color = blackColor, shape = CircleShape)
-                   .clickable{viewModel.choseColor = "Black"}// choseColor gemmes i ProductViewModel
+                   .clickable{viewModel.chosenColor = "Black"}// choseColor gemmes i ProductViewModel
            )
        }
    }

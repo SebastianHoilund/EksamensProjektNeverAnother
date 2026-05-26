@@ -127,7 +127,11 @@ fun ResultScreen(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OutlinedButton(
-                onClick = { navController.popBackStack() },
+                onClick = {
+                    navController.navigate("tailor_start") {
+                        popUpTo("tailor_start") { inclusive = true }
+                    }
+                },
                 modifier = Modifier
                     .weight(1f)
                     .height(56.dp),
@@ -135,7 +139,7 @@ fun ResultScreen(
                 border = BorderStroke(1.dp, Color(0xFFFE5F00)),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFFE5F00))
             ) {
-                Text(text = "Tilbage", fontSize = 18.sp)
+                Text(text = "Forfra", fontSize = 18.sp)
             }
 
             Button(

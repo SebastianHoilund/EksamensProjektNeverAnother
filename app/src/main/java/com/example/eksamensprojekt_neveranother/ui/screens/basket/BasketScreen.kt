@@ -48,9 +48,9 @@ fun BasketScreen (
 
 
     // Knap-logik - 3 tilstande:
-// Kurv ikke tom → "Check ud" → checkout
-// Kurv tom + tailored → "Se din BH" → produkt
-// Kurv tom + ikke tailored → "Skræddersy BH" → measurement start
+    // Kurv ikke tom → "Check ud" → checkout
+    // Kurv tom + tailored → "Se din BH" → produkt
+    // Kurv tom + ikke tailored → "Skræddersy BH" → measurement start
     val btnText = viewModel.getBtnText(isTailored)
 
 
@@ -138,6 +138,7 @@ fun BasketScreen (
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1f)
             ) {
                 items(viewModel.items) { // Hvert produkt har billede, navn, farve, pris og slet-knap
                     item ->
