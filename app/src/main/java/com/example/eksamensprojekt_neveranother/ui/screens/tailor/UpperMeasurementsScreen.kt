@@ -18,7 +18,7 @@ fun UpperMeasurementsScreen(
         videoResId = R.raw.video_1,
         illustrationResId = R.drawable.uc,
         progressResId = R.drawable.progressindicatorstep1,
-        initialValue = viewModel.tailorState.upperCircumference,
+        initialValue = viewModel.measurement.upperCircumference,
         viewModel = viewModel,
         onBackClick = { navController.popBackStack() },
         onNextClick = { value ->

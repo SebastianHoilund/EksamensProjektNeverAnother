@@ -18,7 +18,7 @@ fun WidthMeasurementsScreen(
         videoResId = R.raw.video_4,
         illustrationResId = R.drawable.bs,
         progressResId = R.drawable.progressindicatorstep4,
-        initialValue = viewModel.tailorState.width,
+        initialValue = viewModel.measurement.width,
         viewModel = viewModel,
         onBackClick = {
             navController.popBackStack()

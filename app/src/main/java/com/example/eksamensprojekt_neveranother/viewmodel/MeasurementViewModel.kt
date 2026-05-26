@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.eksamensprojekt_neveranother.data.TailorState
+import com.example.eksamensprojekt_neveranother.data.Measurement
 
 // ===== MEASUREMENT VIEW MODEL =====
 // I MVVM-arkitekturen fungerer ViewModel som bindeleddet mellem data (Model) og brugerflade (View).
@@ -16,7 +16,7 @@ class MeasurementViewModel : ViewModel() {
     // besked på automatisk at genoptegne sig selv (Recomposition).
     // 'private set' sikrer, at UI'en kun kan læse data, men ikke ændre dem direkte. 
     // Ændringer skal ske via funktionerne nedenfor (Encapsulation).
-    var tailorState by mutableStateOf(TailorState())
+    var measurement by mutableStateOf(Measurement())
         private set
 
     // Holder styr på, om brugeren har færdiggjort hele skrædder-processen.
@@ -48,9 +48,9 @@ class MeasurementViewModel : ViewModel() {
         )
         // Validering: Vi tjekker om det gemte indeks faktisk findes i listen (indgår i indices-range).
         // Dette forhindrer "IndexOutOfBoundsException", hvis dataen mod forventning skulle være korrupt.
-        return if (tailorState.selectedVolume in options.indices) {
+        return if (measurement.selectedVolume in options.indices) {
             // Returnerer den menneskeligt læselige streng baseret på indekset.
-            options[tailorState.selectedVolume]
+            options[measurement.selectedVolume]
         } else {
             "-"
         }
@@ -61,23 +61,23 @@ class MeasurementViewModel : ViewModel() {
     // Dette er god praksis i Kotlin for at sikre "Immutability" (uforanderlighed).
 
     fun updateUpper(value: String) {
-        tailorState = tailorState.copy(upperCircumference = value)
+        measurement = measurement.copy(upperCircumference = value)
     }
 
     fun updateLower(value: String) {
-        tailorState = tailorState.copy(lowerCircumference = value)
+        measurement = measurement.copy(lowerCircumference = value)
     }
 
     fun updateHeight(value: String) {
-        tailorState = tailorState.copy(height = value)
+        measurement = measurement.copy(height = value)
     }
 
     fun updateWidth(value: String) {
-        tailorState = tailorState.copy(width = value)
+        measurement = measurement.copy(width = value)
     }
 
     fun updateVolume(value: Int) {
-        tailorState = tailorState.copy(selectedVolume = value)
+        measurement = measurement.copy(selectedVolume = value)
     }
 
     fun completeMeasurement() {

@@ -29,7 +29,7 @@ class HomeViewModel : ViewModel() {
         return if (isTailored) "Se din BH" else "Skræddersy BH"
     }
 
-    // Bestemmer hvor knappen skal navigere hen.
+    // Bestemmer hvor knappen skal navigere hen baseret på om brugeren er målt op.
     fun getHeroBtnRoute(isTailored: Boolean): String {
         return if (isTailored) "product" else "tailor_start"
     }

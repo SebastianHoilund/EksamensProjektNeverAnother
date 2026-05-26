@@ -1,6 +1,6 @@
 package com.example.eksamensprojekt_neveranother.data
 
-data class TailorState(
+data class Measurement(
     val upperCircumference: String = "",
     val lowerCircumference: String = "",
     val height: String = "",

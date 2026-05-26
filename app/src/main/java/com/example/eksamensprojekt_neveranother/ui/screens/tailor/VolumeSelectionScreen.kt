@@ -29,7 +29,7 @@ fun VolumeSelectionScreen(
     navController: NavController,
     viewModel: MeasurementViewModel
 ) {
-    var selectedOption by remember { mutableStateOf(viewModel.tailorState.selectedVolume) }
+    var selectedOption by remember { mutableStateOf(viewModel.measurement.selectedVolume) }
     
     data class VolumeOption(val title: String, val imageResId: Int)
 

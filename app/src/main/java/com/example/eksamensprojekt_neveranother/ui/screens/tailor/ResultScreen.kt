@@ -18,13 +18,11 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
-import com.example.eksamensprojekt_neveranother.data.TailorState
 
 import com.example.eksamensprojekt_neveranother.viewmodel.MeasurementViewModel
 
@@ -34,7 +32,7 @@ fun ResultScreen(
     viewModel: MeasurementViewModel,
     onSeeProduct: () -> Unit = {}
 ) {
-    val state = viewModel.tailorState
+    val state = viewModel.measurement
 
     Column(
         modifier = Modifier

@@ -72,7 +72,7 @@ import com.example.eksamensprojekt_neveranother.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen (
     navController: NavController,
-    isTailored: Boolean, // Modtager state fra AppNavigation for at vide, hvad CTA-knappen skal vise.
+    isTailored: Boolean,
     viewModel: HomeViewModel = viewModel()
     ) {
     Box(
@@ -83,7 +83,7 @@ fun HomeScreen (
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            // Hver sektion i appen er defineret som et 'item' i vores LazyColumn.
+            // Vi sender isTailored direkte videre til HeroSection
             item { HeroSection(navController, isTailored, viewModel) }
             item { VoresProduktSection(navController) }
             item { OmOsSection() }
@@ -102,7 +102,7 @@ fun HeroSection(
     isTailored: Boolean,
     viewModel: HomeViewModel
 ) {
-    // Bestemmer tekst og rute via ViewModel.
+    // ViewModel bestemmer teksten baseret på det parameter vi sender med.
     val btnText = viewModel.getHeroBtnText(isTailored)
     val btnRoute = viewModel.getHeroBtnRoute(isTailored)
 

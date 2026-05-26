@@ -18,7 +18,7 @@ fun LowerMeasurementsScreen(
         videoResId = R.raw.video_2,
         illustrationResId = R.drawable.lc,
         progressResId = R.drawable.progressindicatorstep2,
-        initialValue = viewModel.tailorState.lowerCircumference,
+        initialValue = viewModel.measurement.lowerCircumference,
         viewModel = viewModel,
         onBackClick = {
             navController.popBackStack()

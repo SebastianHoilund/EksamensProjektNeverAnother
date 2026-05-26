@@ -17,13 +17,13 @@ class MeasurementViewModelTest {
     @Test
     fun `updateUpper updates state correctly`() {
         viewModel.updateUpper("75.5")
-        assertEquals("75.5", viewModel.tailorState.upperCircumference)
+        assertEquals("75.5", viewModel.measurement.upperCircumference)
     }
 
     @Test
     fun `updateLower updates state correctly`() {
         viewModel.updateLower("80.0")
-        assertEquals("80.0", viewModel.tailorState.lowerCircumference)
+        assertEquals("80.0", viewModel.measurement.lowerCircumference)
     }
 
     @Test
