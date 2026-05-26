@@ -19,6 +19,7 @@ fun HeightMeasurementsScreen(
         illustrationResId = R.drawable.bh,
         progressResId = R.drawable.progressindicatorstep3,
         initialValue = viewModel.tailorState.height,
+        viewModel = viewModel,
         onBackClick = {
             navController.popBackStack()
         },

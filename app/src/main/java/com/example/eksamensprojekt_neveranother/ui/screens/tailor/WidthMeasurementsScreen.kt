@@ -19,6 +19,7 @@ fun WidthMeasurementsScreen(
         illustrationResId = R.drawable.bs,
         progressResId = R.drawable.progressindicatorstep4,
         initialValue = viewModel.tailorState.width,
+        viewModel = viewModel,
         onBackClick = {
             navController.popBackStack()
         },

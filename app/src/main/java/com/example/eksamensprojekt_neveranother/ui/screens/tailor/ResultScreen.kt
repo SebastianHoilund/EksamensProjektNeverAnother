@@ -35,12 +35,6 @@ fun ResultScreen(
     onSeeProduct: () -> Unit = {}
 ) {
     val state = viewModel.tailorState
-    val volumeOptions = listOf(
-        "fast fylde i toppen",
-        "blød fylde i toppen",
-        "fast fylde i bunden",
-        "blød fylde i bunden"
-    )
 
     Column(
         modifier = Modifier
@@ -113,7 +107,7 @@ fun ResultScreen(
             ResultItem(label = "Brystspænd", value = "${state.width} cm")
             ResultItem(
                 label = "Volumn",
-                value = if (state.selectedVolume != -1) volumeOptions[state.selectedVolume] else "-"
+                value = viewModel.getFormattedVolume()
             )
         }
 

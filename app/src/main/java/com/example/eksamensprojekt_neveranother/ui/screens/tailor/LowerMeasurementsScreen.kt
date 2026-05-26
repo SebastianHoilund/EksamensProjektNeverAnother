@@ -19,6 +19,7 @@ fun LowerMeasurementsScreen(
         illustrationResId = R.drawable.lc,
         progressResId = R.drawable.progressindicatorstep2,
         initialValue = viewModel.tailorState.lowerCircumference,
+        viewModel = viewModel,
         onBackClick = {
             navController.popBackStack()
         },

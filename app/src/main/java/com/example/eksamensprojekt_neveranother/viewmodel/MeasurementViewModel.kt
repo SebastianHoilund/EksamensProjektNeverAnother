@@ -23,6 +23,39 @@ class MeasurementViewModel : ViewModel() {
     var isTailored by mutableStateOf(false)
         private set
 
+    // Tilstand for om vi viser illustration eller video i vores MeasurementTemplate.
+    // Ved at gemme dette i ViewModel, bevares brugerens valg selvom skærmen genopbygges.
+    var showIllustration by mutableStateOf(true)
+        private set
+
+    fun toggleIllustration() {
+        showIllustration = !showIllustration
+    }
+
+    // ===== LOGIC FOR RESULT SCREEN =====
+
+    // Mapper det valgte volumen-indeks til en læselig tekst.
+    // Dette valg er truffet for at adskille den rå data (et heltal/indeks) fra præsentationslaget (tekst).
+    // Ved at definere listen her, sikrer vi en "Single Source of Truth", så UI'en ikke selv skal gætte,
+    // hvad f.eks. indeks 2 betyder.
+    fun getFormattedVolume(): String {
+        // En lokal liste over strenge der korresponderer med de valgmuligheder, brugeren har i UI'en.
+        val options = listOf(
+            "fast fylde i toppen",
+            "blød fylde i toppen",
+            "fast fylde i bunden",
+            "blød fylde i bunden"
+        )
+        // Validering: Vi tjekker om det gemte indeks faktisk findes i listen (indgår i indices-range).
+        // Dette forhindrer "IndexOutOfBoundsException", hvis dataen mod forventning skulle være korrupt.
+        return if (tailorState.selectedVolume in options.indices) {
+            // Returnerer den menneskeligt læselige streng baseret på indekset.
+            options[tailorState.selectedVolume]
+        } else {
+            "-"
+        }
+    }
+
     // Disse funktioner kaldes fra de forskellige skærme (f.eks. UpperMeasurementsScreen).
     // Vi bruger .copy() på vores data class for at skabe en ny version af tilstanden med den opdaterede værdi.
     // Dette er god praksis i Kotlin for at sikre "Immutability" (uforanderlighed).

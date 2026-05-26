@@ -84,7 +84,7 @@ fun HomeScreen (
                 .fillMaxSize()
         ) {
             // Hver sektion i appen er defineret som et 'item' i vores LazyColumn.
-            item { HeroSection(navController, isTailored) }
+            item { HeroSection(navController, isTailored, viewModel) }
             item { VoresProduktSection(navController) }
             item { OmOsSection() }
             item { Footer(viewModel) }
@@ -99,15 +99,13 @@ fun HomeScreen (
 @Composable
 fun HeroSection(
     navController: NavController,
-    isTailored: Boolean
+    isTailored: Boolean,
+    viewModel: HomeViewModel
 ) {
-    // Bestemmer tekst og rute baseret på om brugeren er målt op.
-    val btnText = if (isTailored) "Se din BH" else "Skræddersy BH"
-    val btnRoute = if (isTailored) "product" else "tailor_start"
+    // Bestemmer tekst og rute via ViewModel.
+    val btnText = viewModel.getHeroBtnText(isTailored)
+    val btnRoute = viewModel.getHeroBtnRoute(isTailored)
 
-    // ===== VIDEO INTEGRATION (ExoPlayer) =====
-    // Da Compose er et UI-framework, bruger vi AndroidView til at integrere "gamle" Android-komponenter
-    // som PlayerView fra Media3 biblioteket.
     val context = LocalContext.current
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {

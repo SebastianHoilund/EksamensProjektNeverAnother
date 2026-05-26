@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eksamensprojekt_neveranother.R
+import com.example.eksamensprojekt_neveranother.viewmodel.MeasurementViewModel
 
 // ===== MEASUREMENT TEMPLATE - En genanvendelig komponent =====
 // Dette er et klassisk eksempel på "Component-Driven UI".
@@ -41,6 +42,7 @@ fun MeasurementTemplate(
     illustrationResId: Int,
     progressResId: Int,
     initialValue: String = "0.00",
+    viewModel: MeasurementViewModel,
     
     // Callback-funktioner: Disse gør det muligt for komponenten at sende data 
     // tilbage til den skærm, der bruger den.
@@ -49,10 +51,9 @@ fun MeasurementTemplate(
     onExitClick: () -> Unit = {},
     onHomeClick: () -> Unit = {}
 ) {
-    // ===== LOKAL STATE =====
-    // Disse variabler findes kun inde i denne komponent.
-    // showIllustration styrer, om vi ser tegningen eller videoen.
-    var showIllustration by remember { mutableStateOf(true) }
+    // ===== MVVM STATE =====
+    // Vi bruger  ViewModel til at styre om vi ser tegningen eller videoen.
+    val showIllustration = viewModel.showIllustration
     // measurementValue holder styr på, hvad brugeren har skrevet i tekstfeltet lige nu.
     var measurementValue by remember { mutableStateOf(initialValue) }
     val focusManager = LocalFocusManager.current
@@ -127,8 +128,12 @@ fun MeasurementTemplate(
                 .height(450.dp)
                 .clip(RoundedCornerShape(15.dp))
         ) {
-            // VideoPlayer er en anden custom komponent.
-            // Vi bruger .blur() effekten, hvis illustrationen vises ovenpå.
+            // INTEGRATION AF VIDEOPLAYER:
+            // Vi bruger vores custom VideoPlayer komponent til at vise instruktionsvideoen.
+            // Valget om at bruge .blur() her er essentielt for en flydende brugeroplevelse:
+            // I stedet for at fjerne videoen fra hukommelsen, når brugeren ser illustrationen, 
+            // lader vi den køre videre "sløret" i baggrunden. Det betyder, at når brugeren 
+            // klikker "Se video", vises den øjeblikkeligt uden loading-tid.
             VideoPlayer(
                 videoResId = videoResId,
                 modifier = Modifier
@@ -153,11 +158,11 @@ fun MeasurementTemplate(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TextButton(
-                    onClick = { showIllustration = !showIllustration },
+                    onClick = { viewModel.toggleIllustration() },
                     colors = ButtonDefaults.textButtonColors(contentColor = Color.White)
                 ) {
                     Text(
-                        if (showIllustration) "Se video" else "Se illustration",
+                        if (viewModel.showIllustration) "Se video" else "Se illustration",
                         fontSize = 20.sp
                     )
                 }

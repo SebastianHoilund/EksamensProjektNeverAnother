@@ -23,6 +23,8 @@ import com.example.eksamensprojekt_neveranother.ui.screens.tailor.WidthMeasureme
 import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
 import com.example.eksamensprojekt_neveranother.viewmodel.ProductViewModel
 import com.example.eksamensprojekt_neveranother.viewmodel.MeasurementViewModel
+import com.example.eksamensprojekt_neveranother.viewmodel.ProfileViewModel
+import com.example.eksamensprojekt_neveranother.viewmodel.TailorViewModel
 
 // ===== APP NAVIGATION - Navigations-hjertet =====
 // Denne fil definerer alle de "ruter" (skærme), som appen har.
@@ -38,7 +40,9 @@ fun AppNavigation(
     // Det betyder, at data (f.eks. varer i kurven) ikke forsvinder, når man skifter skærm.
     cartViewModel: CartViewModel = viewModel(),
     productViewModel: ProductViewModel = viewModel(),
-    measurementViewModel: MeasurementViewModel = viewModel()
+    measurementViewModel: MeasurementViewModel = viewModel(),
+    profileViewModel: ProfileViewModel = viewModel(),
+    tailorViewModel: TailorViewModel = viewModel()
 ) {
     // LaunchedEffect lytter på ændringer i measurementViewModel.isTailored.
     // Når brugeren har gennemført målingerne, opdaterer vi ProductViewModel,
@@ -77,8 +81,8 @@ fun AppNavigation(
         
         composable("profile") {
             ProfileScreen(
-                goToHome = { navController.navigate("home") },
-                goToBasket = { navController.navigate("basket") }
+                viewModel = profileViewModel,
+                goToHome = { navController.navigate("home") }
             )
         }
         
@@ -93,7 +97,10 @@ fun AppNavigation(
         // Dette flow består af mange skærme, der alle deler measurementViewModel
         // for at opsamle brugerens input trin for trin.
         composable("tailor_start") {
-            TailorStartScreen(navController = navController)
+            TailorStartScreen(
+                navController = navController,
+                viewModel = tailorViewModel
+            )
         }
         
         composable("upper_measurements") {
@@ -111,7 +118,10 @@ fun AppNavigation(
         }
         
         composable("midway") {
-            MidwayScreen(navController = navController)
+            MidwayScreen(
+                navController = navController,
+                viewModel = tailorViewModel
+            )
         }
         
         composable("height_measurements") {
@@ -136,7 +146,10 @@ fun AppNavigation(
         }
         
         composable("result_loading") {
-            ResultLoadingScreen(navController = navController)
+            ResultLoadingScreen(
+                navController = navController,
+                viewModel = tailorViewModel
+            )
         }
         
         composable("result_screen") {

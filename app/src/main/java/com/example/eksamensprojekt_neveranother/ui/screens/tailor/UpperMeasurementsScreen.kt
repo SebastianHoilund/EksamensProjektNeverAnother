@@ -19,6 +19,7 @@ fun UpperMeasurementsScreen(
         illustrationResId = R.drawable.uc,
         progressResId = R.drawable.progressindicatorstep1,
         initialValue = viewModel.tailorState.upperCircumference,
+        viewModel = viewModel,
         onBackClick = { navController.popBackStack() },
         onNextClick = { value ->
             viewModel.updateUpper(value)

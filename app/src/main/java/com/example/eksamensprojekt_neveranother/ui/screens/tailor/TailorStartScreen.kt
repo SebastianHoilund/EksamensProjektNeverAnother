@@ -25,10 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
+import com.example.eksamensprojekt_neveranother.viewmodel.TailorViewModel
 
 @Composable
 fun TailorStartScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: TailorViewModel
 ){
     Column(
         modifier = Modifier
@@ -59,8 +61,8 @@ fun TailorStartScreen(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(56.dp)
-                    .clickable { navController.navigate("home") {
-                        popUpTo("home") { inclusive = true }
+                    .clickable { navController.navigate(viewModel.routeHome) {
+                        popUpTo(viewModel.routeHome) { inclusive = true }
                     } }
             )
 
@@ -76,7 +78,7 @@ fun TailorStartScreen(
         Spacer(modifier = Modifier.height(140.dp))
 
         Text(
-            text = "Lad os komme i gang!",
+            text = viewModel.startTitle,
             fontSize = 32.sp,
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center,
@@ -105,17 +107,14 @@ fun TailorStartScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = "1. Et blødt målebånd",
-                fontSize = 22.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
-            Text(
-                text = "2. Din bedste passende BH",
-                fontSize = 22.sp,
-                textAlign = TextAlign.Center
-            )
+            viewModel.requirements.forEach { text ->
+                Text(
+                    text = text,
+                    fontSize = 22.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+            }
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -129,7 +128,7 @@ fun TailorStartScreen(
         ) {
 
             Button(
-                onClick = { navController.navigate("upper_measurements") },
+                onClick = { navController.navigate(viewModel.routeToMeasurements) },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(56.dp),
