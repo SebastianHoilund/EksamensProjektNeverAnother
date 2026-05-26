@@ -5,15 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.eksamensprojekt_neveranother.R
-
+import com.example.eksamensprojekt_neveranother.data.BasketItem
 
 // ===== PRODUCT VIEW MODEL =====
-// Holder styr på brugerens valg på produktsiden
+// Holder styr på brugerens valg på produktsiden.
 class ProductViewModel : ViewModel() {
 
-    // choseColor: gemmer den valgte farve ("White" eller "Black")
-    // Bruges til at vise orange ring om den valgte cirkel
-    // Sendes med som BasketItem når man trykker "Føj til kurv"
+    // choseColor: gemmer den valgte farve ("White" eller "Black").
+    // Når denne ændres, opdateres UI'en automatisk (recomposition),
+    // så den orange ring flytter sig til den rigtige cirkel.
     var choseColor by mutableStateOf("")
 
 
@@ -22,12 +22,19 @@ class ProductViewModel : ViewModel() {
     // Styrer om "Se dine mål" knappen er synlig
     var isTailored by mutableStateOf(false)
 
+    // Bestemmer dynamisk teksten på knappen i ProductScreen.
     fun getBtnText(): String {
         return if (isTailored) "Føj til Kurv" else "Skræddersy BH"
     }
 
-    fun onProductAction(cartViewModel: CartViewModel, navigateToBasket: () -> Unit, navigateToTailor: () -> Unit) {
+    // Håndterer hvad der sker, når brugeren klikker på hovedknappen.
+    fun onProductAction(
+        cartViewModel: CartViewModel, 
+        navigateToBasket: () -> Unit, 
+        navigateToTailor: () -> Unit
+    ) {
         if (isTailored) {
+            // Hvis man er målt op, opretter vi et BasketItem (Model) og tilføjer det til kurven.
             cartViewModel.addItem(
                 BasketItem(
                     navn = "OneBra™",
@@ -36,8 +43,10 @@ class ProductViewModel : ViewModel() {
                     billedeRes = R.drawable.productsitemodel1
                 )
             )
+            // Efter tilføjelse navigerer vi brugeren direkte til kurven.
             navigateToBasket()
         } else {
+            // Hvis man ikke er målt op, sendes man til starten af skrædder-flowet.
             navigateToTailor()
         }
     }

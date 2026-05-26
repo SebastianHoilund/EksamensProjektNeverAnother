@@ -25,6 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eksamensprojekt_neveranother.R
 
+// ===== MEASUREMENT TEMPLATE - En genanvendelig komponent =====
+// Dette er et klassisk eksempel på "Component-Driven UI".
+// I stedet for at skrive koden til alle 4 målingsskærme forfra, har jeg lavet denne skabelon.
+// Den tager parametre (title, description, video osv.) og funktioner (onNextClick, onBackClick),
+// hvilket gør den ekstremt fleksibel og nemt at maintain.
 @Composable
 fun MeasurementTemplate(
     title: String,
@@ -33,22 +38,30 @@ fun MeasurementTemplate(
     illustrationResId: Int,
     progressResId: Int,
     initialValue: String = "0.00",
+    
+    // Callback-funktioner: Disse gør det muligt for komponenten at sende data 
+    // tilbage til den skærm, der bruger den.
     onBackClick: () -> Unit,
     onNextClick: (String) -> Unit,
     onExitClick: () -> Unit = {},
     onHomeClick: () -> Unit = {}
 ) {
+    // ===== LOKAL STATE =====
+    // Disse variabler findes kun inde i denne komponent.
+    // showIllustration styrer, om vi ser tegningen eller videoen.
     var showIllustration by remember { mutableStateOf(true) }
+    // measurementValue holder styr på, hvad brugeren har skrevet i tekstfeltet lige nu.
     var measurementValue by remember { mutableStateOf(initialValue) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFFAF9F1))
-            .statusBarsPadding()
-            .verticalScroll(rememberScrollState()),
+            .statusBarsPadding() // Sikrer at indholdet ikke ligger bag statusbaren øverst.
+            .verticalScroll(rememberScrollState()), // Gør det muligt at scrolle på små skærme.
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // TOP BAR med Exit, Home og Progress
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -103,12 +116,15 @@ fun MeasurementTemplate(
                 .width(300.dp)
         )
 
+        // ===== VIDEO & ILLUSTRATION BOX =====
         Box(
             modifier = Modifier
                 .width(300.dp)
                 .height(450.dp)
                 .clip(RoundedCornerShape(15.dp))
         ) {
+            // VideoPlayer er en anden custom komponent.
+            // Vi bruger .blur() effekten, hvis illustrationen vises ovenpå.
             VideoPlayer(
                 videoResId = videoResId,
                 modifier = Modifier
@@ -125,6 +141,7 @@ fun MeasurementTemplate(
                 )
             }
 
+            // Knap til at skifte mellem video og illustration.
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -140,17 +157,11 @@ fun MeasurementTemplate(
                         fontSize = 20.sp
                     )
                 }
-
-                HorizontalDivider(
-                    thickness = 2.dp,
-                    color = Color(0xFFFE5F00),
-                    modifier = Modifier
-                        .width(64.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
+                HorizontalDivider(thickness = 2.dp, color = Color(0xFFFE5F00), modifier = Modifier.width(64.dp).align(Alignment.CenterHorizontally))
             }
         }
 
+        // ===== INPUT FELT =====
         Column(
             modifier = Modifier
                 .padding(top = 28.dp)
@@ -163,6 +174,7 @@ fun MeasurementTemplate(
                 verticalAlignment = Alignment.Bottom
             ) {
                 Box(modifier = Modifier.weight(1f)) {
+                    // Placeholder tekst (0.00), hvis feltet er tomt.
                     if (measurementValue.isEmpty()) {
                         Text(
                             text = "0.00",
@@ -171,6 +183,7 @@ fun MeasurementTemplate(
                             textAlign = TextAlign.Start
                         )
                     }
+                    // Det faktiske inputfelt.
                     BasicTextField(
                         value = measurementValue,
                         onValueChange = { measurementValue = it },
@@ -179,7 +192,7 @@ fun MeasurementTemplate(
                             color = Color.Gray,
                             textAlign = TextAlign.Start
                         ),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), // kun tal kan skrives
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -197,6 +210,7 @@ fun MeasurementTemplate(
             )
         }
 
+        // ===== NAVIGATIONS KNAPPER (Bund) =====
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -216,15 +230,10 @@ fun MeasurementTemplate(
             }
 
             Button(
-                onClick = { onNextClick(measurementValue) },
-                modifier = Modifier
-                    .weight(1.5f)
-                    .height(56.dp),
+                onClick = { onNextClick(measurementValue) }, // Sender den indtastede værdi videre.
+                modifier = Modifier.weight(1.5f).height(56.dp),
                 shape = RoundedCornerShape(28.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFE5F00),
-                    contentColor = Color.White
-                )
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFE5F00), contentColor = Color.White)
             ) {
                 Text(text = "Fortsæt", fontSize = 18.sp)
             }

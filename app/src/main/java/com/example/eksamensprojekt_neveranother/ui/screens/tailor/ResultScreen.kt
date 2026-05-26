@@ -109,25 +109,15 @@ fun ResultScreen(
         ) {
             ResultItem(label = "Øvre omkreds", value = "${state.upperCircumference} cm")
             ResultItem(label = "Nedre omkreds", value = "${state.lowerCircumference} cm")
+            ResultItem(label = "Brysthøjde", value = "${state.height} cm")
+            ResultItem(label = "Brystspænd", value = "${state.width} cm")
             ResultItem(
                 label = "Volumn",
                 value = if (state.selectedVolume != -1) volumeOptions[state.selectedVolume] else "-"
             )
-            ResultItem(label = "Brystspænd", value = "${state.width} cm")
-            ResultItem(label = "Brysthøjde", value = "${state.height} cm")
         }
 
         Spacer(modifier = Modifier.weight(1f))
-
-        Text(
-            text = "Dobbelttjek med 3D-scanner",
-            fontSize = 14.sp,
-            color = Color.Gray,
-            textDecoration = TextDecoration.Underline,
-            modifier = Modifier
-                .padding(vertical = 16.dp)
-                .clickable { /* TODO: 3D Scanner */ }
-        )
 
         // Bottom Buttons
         Row(
