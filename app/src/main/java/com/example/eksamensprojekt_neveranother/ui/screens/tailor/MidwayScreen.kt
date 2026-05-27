@@ -24,10 +24,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
+import com.example.eksamensprojekt_neveranother.viewmodel.TailorViewModel
 
 @Composable
 fun MidwayScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: TailorViewModel
 ){
     Column(
         modifier = Modifier
@@ -58,8 +60,8 @@ fun MidwayScreen(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(56.dp)
-                    .clickable { navController.navigate("home") {
-                        popUpTo("home") { inclusive = true }
+                    .clickable { navController.navigate(viewModel.routeHome) {
+                        popUpTo(viewModel.routeHome) { inclusive = true }
                     } }
             )
         }
@@ -67,7 +69,7 @@ fun MidwayScreen(
         Spacer(modifier = Modifier.height(140.dp))
 
         Text(
-            text = "Du klarer det godt!",
+            text = viewModel.midwayTitle,
             fontSize = 32.sp,
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center,
@@ -85,7 +87,7 @@ fun MidwayScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "Vi mangler kun et par mål!",
+            text = viewModel.midwayDescription,
             fontSize = 22.sp,
             textAlign = TextAlign.Center
         )
@@ -112,7 +114,7 @@ fun MidwayScreen(
             }
 
             Button(
-                onClick = { navController.navigate("height_measurements") },
+                onClick = { navController.navigate(viewModel.routeToHeight) },
                 modifier = Modifier
                     .weight(1.5f)
                     .height(56.dp),

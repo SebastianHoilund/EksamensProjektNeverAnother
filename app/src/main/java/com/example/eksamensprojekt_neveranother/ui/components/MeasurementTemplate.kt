@@ -1,4 +1,4 @@
-package com.example.eksamensprojekt_neveranother.ui.screens.components
+package com.example.eksamensprojekt_neveranother.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -17,14 +18,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eksamensprojekt_neveranother.R
+import com.example.eksamensprojekt_neveranother.viewmodel.MeasurementViewModel
 
+// Sebastian
+// ===== MEASUREMENT TEMPLATE - En genanvendelig komponent =====
+// Dette er et klassisk eksempel på "Component-Driven UI".
+// I stedet for at skrive koden til alle 4 målingsskærme forfra, har jeg lavet denne skabelon.
+// Den tager parametre (title, description, video osv.) og funktioner (onNextClick, onBackClick),
+// hvilket gør den ekstremt fleksibel og nemt at maintain.
 @Composable
 fun MeasurementTemplate(
     title: String,
@@ -33,22 +43,31 @@ fun MeasurementTemplate(
     illustrationResId: Int,
     progressResId: Int,
     initialValue: String = "0.00",
+    viewModel: MeasurementViewModel,
+    
+    // Callback-funktioner: Disse gør det muligt for komponenten at sende data 
+    // tilbage til den skærm, der bruger den.
     onBackClick: () -> Unit,
     onNextClick: (String) -> Unit,
     onExitClick: () -> Unit = {},
     onHomeClick: () -> Unit = {}
 ) {
-    var showIllustration by remember { mutableStateOf(true) }
+    // ===== MVVM STATE =====
+    // Vi bruger  ViewModel til at styre om vi ser tegningen eller videoen.
+    val showIllustration = viewModel.showIllustration
+    // measurementValue holder styr på, hvad brugeren har skrevet i tekstfeltet lige nu.
     var measurementValue by remember { mutableStateOf(initialValue) }
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFFAF9F1))
-            .statusBarsPadding()
-            .verticalScroll(rememberScrollState()),
+            .statusBarsPadding() // Sikrer at indholdet ikke ligger bag statusbaren øverst.
+            .verticalScroll(rememberScrollState()), // Gør det muligt at scrolle på små skærme.
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // TOP BAR med Exit, Home og Progress
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -103,12 +122,19 @@ fun MeasurementTemplate(
                 .width(300.dp)
         )
 
+        // ===== VIDEO & ILLUSTRATION BOX =====
         Box(
             modifier = Modifier
                 .width(300.dp)
                 .height(450.dp)
                 .clip(RoundedCornerShape(15.dp))
         ) {
+            // INTEGRATION AF VIDEOPLAYER:
+            // Vi bruger vores custom VideoPlayer komponent til at vise instruktionsvideoen.
+            // Valget om at bruge .blur() her er essentielt for en flydende brugeroplevelse:
+            // I stedet for at fjerne videoen fra hukommelsen, når brugeren ser illustrationen, 
+            // lader vi den køre videre "sløret" i baggrunden. Det betyder, at når brugeren 
+            // klikker "Se video", vises den øjeblikkeligt uden loading-tid.
             VideoPlayer(
                 videoResId = videoResId,
                 modifier = Modifier
@@ -125,6 +151,7 @@ fun MeasurementTemplate(
                 )
             }
 
+            // Knap til at skifte mellem video og illustration.
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -132,25 +159,19 @@ fun MeasurementTemplate(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TextButton(
-                    onClick = { showIllustration = !showIllustration },
+                    onClick = { viewModel.toggleIllustration() },
                     colors = ButtonDefaults.textButtonColors(contentColor = Color.White)
                 ) {
                     Text(
-                        if (showIllustration) "Se video" else "Se illustration",
+                        if (viewModel.showIllustration) "Se video" else "Se illustration",
                         fontSize = 20.sp
                     )
                 }
-
-                HorizontalDivider(
-                    thickness = 2.dp,
-                    color = Color(0xFFFE5F00),
-                    modifier = Modifier
-                        .width(64.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
+                HorizontalDivider(thickness = 2.dp, color = Color(0xFFFE5F00), modifier = Modifier.width(64.dp).align(Alignment.CenterHorizontally))
             }
         }
 
+        // ===== INPUT FELT =====
         Column(
             modifier = Modifier
                 .padding(top = 28.dp)
@@ -163,6 +184,7 @@ fun MeasurementTemplate(
                 verticalAlignment = Alignment.Bottom
             ) {
                 Box(modifier = Modifier.weight(1f)) {
+                    // Placeholder tekst (0.00), hvis feltet er tomt.
                     if (measurementValue.isEmpty()) {
                         Text(
                             text = "0.00",
@@ -171,15 +193,26 @@ fun MeasurementTemplate(
                             textAlign = TextAlign.Start
                         )
                     }
+                    // Det faktiske inputfelt.
                     BasicTextField(
                         value = measurementValue,
                         onValueChange = { measurementValue = it },
+                        singleLine = true,
                         textStyle = TextStyle(
                             fontSize = 28.sp,
                             color = Color.Gray,
                             textAlign = TextAlign.Start
                         ),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ), // kun tal kan skrives, og vi tilføjer "Færdig" knap til tastaturet
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                                onNextClick(measurementValue)
+                            }
+                        ),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -197,6 +230,7 @@ fun MeasurementTemplate(
             )
         }
 
+        // ===== NAVIGATIONS KNAPPER (Bund) =====
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -216,15 +250,10 @@ fun MeasurementTemplate(
             }
 
             Button(
-                onClick = { onNextClick(measurementValue) },
-                modifier = Modifier
-                    .weight(1.5f)
-                    .height(56.dp),
+                onClick = { onNextClick(measurementValue) }, // Sender den indtastede værdi videre.
+                modifier = Modifier.weight(1.5f).height(56.dp),
                 shape = RoundedCornerShape(28.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFE5F00),
-                    contentColor = Color.White
-                )
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFE5F00), contentColor = Color.White)
             ) {
                 Text(text = "Fortsæt", fontSize = 18.sp)
             }

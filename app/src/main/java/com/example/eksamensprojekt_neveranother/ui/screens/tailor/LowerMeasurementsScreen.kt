@@ -3,13 +3,14 @@ package com.example.eksamensprojekt_neveranother.ui.screens.tailor
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
-import com.example.eksamensprojekt_neveranother.ui.screens.components.MeasurementTemplate
+import com.example.eksamensprojekt_neveranother.ui.components.MeasurementTemplate
+
+import com.example.eksamensprojekt_neveranother.viewmodel.MeasurementViewModel
 
 @Composable
 fun LowerMeasurementsScreen(
     navController: NavController,
-    initialValue: String,
-    onValueSaved: (String) -> Unit
+    viewModel: MeasurementViewModel
 ) {
     MeasurementTemplate(
         title = "Nedre omkreds",
@@ -17,12 +18,13 @@ fun LowerMeasurementsScreen(
         videoResId = R.raw.video_2,
         illustrationResId = R.drawable.lc,
         progressResId = R.drawable.progressindicatorstep2,
-        initialValue = initialValue,
+        initialValue = viewModel.measurement.lowerCircumference,
+        viewModel = viewModel,
         onBackClick = {
             navController.popBackStack()
         },
         onNextClick = { value ->
-            onValueSaved(value)
+            viewModel.updateLower(value)
             navController.navigate("midway")
         }
     )

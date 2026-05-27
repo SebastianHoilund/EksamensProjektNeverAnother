@@ -1,5 +1,6 @@
 package com.example.eksamensprojekt_neveranother.ui.screens.tailor
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,10 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
+import com.example.eksamensprojekt_neveranother.viewmodel.TailorViewModel
 
+// Sebastian
 @Composable
 fun TailorStartScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: TailorViewModel
 ){
     Column(
         modifier = Modifier
@@ -57,8 +62,8 @@ fun TailorStartScreen(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(56.dp)
-                    .clickable { navController.navigate("home") {
-                        popUpTo("home") { inclusive = true }
+                    .clickable { navController.navigate(viewModel.routeHome) {
+                        popUpTo(viewModel.routeHome) { inclusive = true }
                     } }
             )
 
@@ -74,7 +79,7 @@ fun TailorStartScreen(
         Spacer(modifier = Modifier.height(140.dp))
 
         Text(
-            text = "Lad os komme i gang!",
+            text = viewModel.startTitle,
             fontSize = 32.sp,
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center,
@@ -103,43 +108,43 @@ fun TailorStartScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = "1. Et blødt målebånd",
-                fontSize = 22.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
-            Text(
-                text = "2. Din bedste passende BH",
-                fontSize = 22.sp,
-                textAlign = TextAlign.Center
-            )
+            viewModel.requirements.forEach { text ->
+                Text(
+                    text = text,
+                    fontSize = 22.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+            }
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(
-            onClick = { navController.navigate("upper_measurements") },
+        // ===== Forsætknap =====
+        Row(
             modifier = Modifier
-                .fillMaxWidth(0.7f)
-                .height(56.dp),
-            shape = RoundedCornerShape(28.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFE5F00),
-                contentColor = Color.White
-            )
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp, vertical = 32.dp),
+            horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = "Fortsæt", fontSize = 18.sp)
+
+            Button(
+                onClick = { navController.navigate(viewModel.routeToMeasurements) },
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(56.dp),
+                shape = RoundedCornerShape(28.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFE5F00),
+                    contentColor = Color.White
+                )
+            ) {
+                Text(text = "Fortsæt", fontSize = 18.sp)
+            }
         }
 
-        Text(
-            text = "Jeg har ikke et målebånd",
-            fontSize = 14.sp,
-            color = Color.Gray,
-            textDecoration = TextDecoration.Underline,
-            modifier = Modifier
-                .padding(top = 16.dp, bottom = 32.dp)
-                .clickable { /* TODO */ }
-        )
+
+        
+
     }
 }
