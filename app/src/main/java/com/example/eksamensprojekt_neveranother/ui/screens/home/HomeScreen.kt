@@ -61,15 +61,20 @@ import com.example.eksamensprojekt_neveranother.ui.theme.whiteColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.eksamensprojekt_neveranother.viewmodel.HomeViewModel
 
-
-
+// Jacob
 // ===== HOMESCREEN =====
-// Startskærmen - indeholder en scrollbar liste med alle sektioner
+// Forsiden af appen. Vi bruger en LazyColumn til at opbygge siden,
+// da det svarer til en vertikal scrollbar liste (ligesom en hjemmeside).
+// Fordelen ved LazyColumn er, at den kun tegner de elementer, der er synlige på skærmen
+// hvilket forbedre performance af appen
 @Composable
 fun HomeScreen (
     navController: NavController,
-    isTailored: Boolean
+    isTailored: Boolean,
+    viewModel: HomeViewModel = viewModel()
     ) {
     Box(
         modifier = Modifier
@@ -79,34 +84,29 @@ fun HomeScreen (
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            item {HeroSection(navController, isTailored) }
-            item {VoresProduktSection(navController)  }
-            item {OmOsSection() }
-            item { Footer() }
+            // Vi sender isTailored direkte videre til HeroSection
+            item { HeroSection(navController, isTailored, viewModel) }
+            item { VoresProduktSection(navController) }
+            item { OmOsSection() }
+            item { Footer(viewModel) }
         }
     }
 }
 
 
 // ===== HERO SECTION =====
-// isTailored: true = brugeren har lavet onboarding, knap skifter til "Se din BH"
+// Det øverste område af forsiden med video-baggrund og hoved-CTA.
 @OptIn(UnstableApi::class)
 @Composable
 fun HeroSection(
     navController: NavController,
-    isTailored: Boolean
+    isTailored: Boolean,
+    viewModel: HomeViewModel
 ) {
+    // ViewModel bestemmer teksten baseret på det parameter vi sender med.
+    val btnText = viewModel.getHeroBtnText(isTailored)
+    val btnRoute = viewModel.getHeroBtnRoute(isTailored)
 
-
-    val btnText = if (isTailored) "Se din BH"
-    else "Skræddersy BH"
-
-    val btnRoute = if (isTailored) "product"
-    else "tailor_start"
-
-
-
-    // Video der afspilles automatisk i baggrunden på loop uden lyd
     val context = LocalContext.current
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
@@ -115,14 +115,14 @@ fun HeroSection(
                     "android.resource://${context.packageName}/raw/homescreenstartvideo"
                 )
             )
-            repeatMode = Player.REPEAT_MODE_ALL
-            volume = 0f
+            repeatMode = Player.REPEAT_MODE_ALL // Looper videoen uendeligt.
+            volume = 0f // Ingen lyd.
             prepare()
-            playWhenReady = true
+            playWhenReady = true // Starter automatisk.
         }
     }
 
-// ExoPlayer sættes op og frigives når screen lukkes (DisposableEffect)
+    // DisposableEffect sikrer, at vi rydder op (frigiver hukommelse), når vi forlader skærmen.
     DisposableEffect(Unit) {
         onDispose { exoPlayer.release() }
     }
@@ -134,27 +134,26 @@ fun HeroSection(
             .fillMaxWidth()
             .height(380.dp)
     ) {
-
+        // Her viser vi videoen bagved alt det andet indhold i Box'en.
         AndroidView(
             factory = {
                 PlayerView(it).apply {
                     player = exoPlayer
-                    useController = false
-                    resizeMode =
-                        androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+                    useController = false // Ingen play/pause knapper synlige.
+                    resizeMode = androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
                 }
             },
             modifier = Modifier.fillMaxSize()
         )
 
+        // Overlay med logo og tekst oven på videoen.
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Image(// Logo øverst i hero
+            Image(
                 painter = painterResource(id = R.drawable.nalogowhite700),
                 contentDescription = "NeverAnother Logo",
                 modifier = Modifier
@@ -165,7 +164,8 @@ fun HeroSection(
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            Text(// Titel-tekst med blandede farver (orange + hvid) via buildAnnotatedString
+            // buildAnnotatedString gør det muligt at style forskellige ord i den samme tekst-blok forskelligt.
+            Text(
                 text = buildAnnotatedString {
                     withStyle(style = SpanStyle(color = ctaColor))
                     {
@@ -189,6 +189,7 @@ fun HeroSection(
                 },
                 textAlign = TextAlign.Center,
                 fontSize = 36.sp,
+                lineHeight = 44.sp,
                 fontWeight = FontWeight.Bold
             )
 
@@ -211,10 +212,11 @@ fun HeroSection(
         }
     }
 }
+
 // ===== VORES PRODUKT SECTION =====
+// Sektion der præsenterer OneBra med en billedkarussel.
 @Composable
 fun VoresProduktSection (navController: NavController) {
-
     val billeder = listOf(
         R.drawable.voresproduktfirstpic,
         R.drawable.voresproduktsecondpic,
@@ -222,6 +224,8 @@ fun VoresProduktSection (navController: NavController) {
         R.drawable.voresproduktfourthpic,
         R.drawable.voresproduktfifthpic
     )
+    
+    // PagerState holder styr på, hvilket billede karussellen er på lige nu.
     val pagerState = rememberPagerState(pageCount = { billeder.size })
 
     Column(
@@ -230,24 +234,13 @@ fun VoresProduktSection (navController: NavController) {
             .fillMaxWidth()
             .padding(vertical = 16.dp)
     ) {
-
-Text(
-    text = "Vores produkt",
-    fontSize = 28.sp,
-    modifier = Modifier.align(Alignment.CenterHorizontally)
-)
-
+        Text(
+            text = "Vores produkt", fontSize = 28.sp,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+        
         Spacer(modifier = Modifier.height(10.dp))
-
-//Lille Orange Streg under Vores Produkt.
-Box(//Orange Streg
-    modifier = Modifier
-        .width(50.dp)
-        .height(2.dp)
-        .background(ctaColor)
-        .align(Alignment.CenterHorizontally)
-) {}
-
+        Box(modifier = Modifier.width(50.dp).height(2.dp).background(ctaColor).align(Alignment.CenterHorizontally)) {}
         Spacer(modifier = Modifier.height(16.dp))
 
         Row(
@@ -256,14 +249,14 @@ Box(//Orange Streg
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-Text(// OneBra™ er klikbar og navigerer til produktsiden
-    text = "OneBra™",
+            Text(// OneBra™ er klikbar og navigerer til produktsiden
+                text = "OneBra™",
 
-    textDecoration = TextDecoration.Underline,
-    fontSize = 28.sp,
-    modifier = Modifier
-        .clickable {navController.navigate("product")}
-)
+                textDecoration = TextDecoration.Underline,
+                fontSize = 28.sp,
+                modifier = Modifier
+                    .clickable {navController.navigate("product")}
+            )
             Text(
                 text = "799,00 kr.",
 
@@ -275,32 +268,29 @@ Text(// OneBra™ er klikbar og navigerer til produktsiden
 
         Spacer(modifier = Modifier.height(14.dp))
 
-HorizontalPager(// HorizontalPager = swipebar billedkarussel med 5 produktbilleder
-    state = pagerState,
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(220.dp),
-    contentPadding = PaddingValues(horizontal = 16.dp),
-    pageSpacing = 16.dp,
-    pageSize = PageSize.Fixed(150.dp)
-) {
-    page ->
-
-    Image(painter = painterResource(id = billeder[page]),
-        contentDescription = "Model billeder til karrusel",
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .fillMaxHeight()
-    )
+        // HorizontalPager gør det muligt at "swipe" mellem billeder.
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth().height(220.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            pageSpacing = 16.dp,
+            pageSize = PageSize.Fixed(150.dp)
+        ) { page ->
+            Image(
+                painter = painterResource(id = billeder[page]),
+                contentDescription = "Produktbillede",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxHeight()
+            )
         }
     }
 }
 
-
 // ===== OM OS SECTION =====
+// sektion der forklarer brandets mission.
+// Vi bruger Rows til at skabe et skiftenede men overskueligt layout med tekst og billeder.
 @Composable
 fun OmOsSection () {
-
     Column(
         modifier = Modifier
             .background(backgroundColor)
@@ -315,15 +305,7 @@ fun OmOsSection () {
         )
 
         Spacer(modifier = Modifier.height(10.dp))
-
-        Box(//Orange Streg
-            modifier = Modifier
-                .width(50.dp)
-                .height(2.dp)
-                .background(ctaColor)
-                .align(Alignment.CenterHorizontally)
-        ) {}
-
+        Box(modifier = Modifier.width(50.dp).height(2.dp).background(ctaColor).align(Alignment.CenterHorizontally)) {}
         Spacer(modifier = Modifier.height(26.dp))
 
         Row(// 5 rækker med billede + tekst side om side (skifter venstre/højre)
@@ -516,12 +498,10 @@ fun OmOsSection () {
     } //column
 }
 
-
 // ===== FOOTER =====
+// Bunden af siden med nyhedsbrev-tilmelding.
 @Composable
-fun Footer () {
-
-    var email by remember { mutableStateOf("") }
+fun Footer (viewModel: HomeViewModel) {
 
     Column(
         modifier = Modifier
@@ -557,12 +537,12 @@ fun Footer () {
               .background(backgroundColor, shape = RoundedCornerShape(4.dp)),
           verticalAlignment = Alignment.CenterVertically
       ) {
-          BasicTextField(value = email,
-              onValueChange = { email = it },
+          BasicTextField(value = viewModel.email,
+              onValueChange = { viewModel.onEmailChange(it) },
               modifier = Modifier
                   .weight(1f)
                   .padding(horizontal = 12.dp, vertical = 14.dp),
-              decorationBox = {innerTextField -> if (email.isEmpty()) {
+              decorationBox = {innerTextField -> if (viewModel.email.isEmpty()) {
                   Text("E-mail", color = Color.Gray)
               }
                   innerTextField()
@@ -573,7 +553,7 @@ fun Footer () {
               modifier = Modifier
                   .background(ctaColor)
                   .padding(14.dp)
-                  .clickable{}
+                  .clickable{ viewModel.onSendEmail() }
 
           ) {
               Icon(
@@ -585,6 +565,5 @@ fun Footer () {
       }
 
         Spacer(modifier = Modifier.height(52.dp))
-
     }
 }

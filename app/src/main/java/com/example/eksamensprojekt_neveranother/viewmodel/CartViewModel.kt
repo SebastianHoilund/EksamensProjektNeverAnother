@@ -1,29 +1,48 @@
- package com.example.eksamensprojekt_neveranother.viewmodel
+package com.example.eksamensprojekt_neveranother.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-
+import com.example.eksamensprojekt_neveranother.data.BasketItem
 
 // ===== CART VIEW MODEL =====
-// Holder styr på varerne i kurven
-data class BasketItem( // BasketItem: data class der repræsenterer én vare
-    val navn: String,// navn: produktnavn (fx "OneBra™")
-    val farve: String,// farve: valgt farve (fx "White")
-    val pris: String,// pris: pris som tekst (fx "799,00")
-    val billedeRes: Int// billedeRes: ressource-ID til billedet af produktet
-)
-
-
+// Denne ViewModel fungerer som "sandheden" for brugerens indkøbskurv.
+// Den lever i navigations-stakken (AppNavigation), så den bevarer sin data
+// uanset om brugeren går til forsiden, profilen eller produktsiden.
 class CartViewModel : ViewModel() {
 
-    val items = mutableStateListOf<BasketItem>()// items: liste af varer der automatisk opdaterer UI
+    // mutableStateListOf er en speciel liste i Compose. 
+    // Når man tilføjer eller fjerner elementer fra listen, opdaterer UI'en (f.eks. BasketScreen) 
+    // sig selv automatisk uden at man skal kalde "refresh".
+    // Vi bruger BasketItem-modellen, som nu ligger i 'data' pakken.
+    val items = mutableStateListOf<BasketItem>()
 
-    fun addItem (item: BasketItem) {// addItem(): tilføjer en ny vare til kurven
+    // Tilføjer en ny vare til kurven.
+    fun addItem (item: BasketItem) {
         items.add(item)
     }
 
-    fun deleteItem (item: BasketItem) {// deleteItem(): fjerner en vare fra kurven
+    // Fjerner en specifik vare fra kurven.
+    fun deleteItem (item: BasketItem) {
         items.remove(item)
     }
 
+    // ===== FORRETNINGSLOGIK (BUSINESS LOGIC) =====
+    // En stor fordel ved ViewModels er, at vi kan flytte logik væk fra selve skærmene.
+    // Denne funktion bestemmer, hvad teksten på knapperne skal være baseret på appens samlede tilstand.
+    fun getBtnText(isTailored: Boolean): String {
+        return when {
+            items.isNotEmpty() -> "Check ud"       // Prioritet 1: Hvis der er varer, skal man betale.
+            isTailored -> "Se din BH"              // Prioritet 2: Hvis man er målt op, skal man se sit produkt.
+            else -> "Skræddersy BH"               // Default: Start onboarding.
+        }
+    }
+
+    // Bestemmer hvor knappen skal navigere hen.
+    fun getBtnNavigation(isTailored: Boolean): String {
+        return when {
+            items.isNotEmpty() -> "checkout"
+            isTailored -> "product"
+            else -> "tailor_start"
+        }
+    }
 }

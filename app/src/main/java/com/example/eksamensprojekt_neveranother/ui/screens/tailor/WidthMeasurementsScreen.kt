@@ -3,13 +3,14 @@ package com.example.eksamensprojekt_neveranother.ui.screens.tailor
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
-import com.example.eksamensprojekt_neveranother.ui.screens.components.MeasurementTemplate
+import com.example.eksamensprojekt_neveranother.ui.components.MeasurementTemplate
+
+import com.example.eksamensprojekt_neveranother.viewmodel.MeasurementViewModel
 
 @Composable
 fun WidthMeasurementsScreen(
     navController: NavController,
-    initialValue: String,
-    onValueSaved: (String) -> Unit
+    viewModel: MeasurementViewModel
 ) {
     MeasurementTemplate(
         title = "Brystspænd",
@@ -17,12 +18,13 @@ fun WidthMeasurementsScreen(
         videoResId = R.raw.video_4,
         illustrationResId = R.drawable.bs,
         progressResId = R.drawable.progressindicatorstep4,
-        initialValue = initialValue,
+        initialValue = viewModel.measurement.width,
+        viewModel = viewModel,
         onBackClick = {
             navController.popBackStack()
         },
         onNextClick = { value ->
-            onValueSaved(value)
+            viewModel.updateWidth(value)
             navController.navigate("volume_selection")
         }
     )

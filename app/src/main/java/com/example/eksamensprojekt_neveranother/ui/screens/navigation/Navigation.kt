@@ -32,6 +32,7 @@ import com.example.eksamensprojekt_neveranother.ui.theme.ctaColor
 import com.example.eksamensprojekt_neveranother.ui.theme.greyColor
 import com.example.eksamensprojekt_neveranother.ui.theme.whiteColor
 
+// Astrid
 @Composable
 fun OnCurrentScreen(modifier: Modifier = Modifier){
         HorizontalDivider(

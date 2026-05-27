@@ -14,19 +14,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.eksamensprojekt_neveranother.R
+import com.example.eksamensprojekt_neveranother.viewmodel.TailorViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun ResultLoadingScreen(navController: NavController) {
+fun ResultLoadingScreen(
+    navController: NavController,
+    viewModel: TailorViewModel
+) {
     var progress by remember { mutableStateOf(0) }
 
+    // Selvom timingen her er UI-specifik, styres ruten nu af vores ViewModel (MVVM).
     LaunchedEffect(Unit) {
         for (i in 0..10) {
             progress = i * 10
             if (i < 10) delay(150)
         }
         delay(300)
-        navController.navigate("result_screen") {
+        navController.navigate(viewModel.routeToResult) {
             popUpTo("result_loading") { inclusive = true }
         }
     }

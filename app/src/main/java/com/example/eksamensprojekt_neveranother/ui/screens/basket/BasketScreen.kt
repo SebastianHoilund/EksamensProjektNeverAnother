@@ -38,6 +38,7 @@ import com.example.eksamensprojekt_neveranother.ui.theme.whiteColor
 import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
 
 
+// Jacob
 // ===== BASKET SCREEN =====
 @Composable
 fun BasketScreen (
@@ -48,22 +49,14 @@ fun BasketScreen (
 
 
     // Knap-logik - 3 tilstande:
-// Kurv ikke tom → "Check ud" → checkout
-// Kurv tom + tailored → "Se din BH" → produkt
-// Kurv tom + ikke tailored → "Skræddersy BH" → measurement start
-    val btnText = when {
-        viewModel.items.isNotEmpty() -> "Check ud"
-        isTailored -> "Se din BH"
-        else -> "Skræddersy BH"
-    }
+    // Kurv ikke tom → "Check ud" → checkout
+    // Kurv tom + tailored → "Se din BH" → produkt
+    // Kurv tom + ikke tailored → "Skræddersy BH" → measurement start
+    val btnText = viewModel.getBtnText(isTailored)
 
 
     //Knap navigation
-    val btnNavigation = when {
-        viewModel.items.isNotEmpty() -> "checkout"
-        isTailored -> "product"
-        else -> "tailor_start"
-    }
+    val btnNavigation = viewModel.getBtnNavigation(isTailored)
 
     Column(
         modifier = Modifier
@@ -146,6 +139,7 @@ fun BasketScreen (
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1f)
             ) {
                 items(viewModel.items) { // Hvert produkt har billede, navn, farve, pris og slet-knap
                     item ->

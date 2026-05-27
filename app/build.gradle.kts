@@ -57,6 +57,7 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.navigation.testing)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -66,4 +67,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-core:1.7.8") // importerede til iconer
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
+    testImplementation("androidx.compose.ui:ui-test-junit4:1.7.0")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.0")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.7.0")
 }
