@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -29,10 +28,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,28 +42,26 @@ import com.example.eksamensprojekt_neveranother.ui.theme.backgroundColor
 import com.example.eksamensprojekt_neveranother.ui.theme.blackColor
 import com.example.eksamensprojekt_neveranother.ui.theme.ctaColor
 import com.example.eksamensprojekt_neveranother.ui.theme.whiteColor
-import com.example.eksamensprojekt_neveranother.viewmodel.BasketItem
 import com.example.eksamensprojekt_neveranother.viewmodel.CartViewModel
 import com.example.eksamensprojekt_neveranother.viewmodel.ProductViewModel
 
 
 // ===== PRODUCT SCREEN =====
-// isTailored: styrer knapteksten
-//   - true  → "Føj til kurv" → tilføjer vare og navigerer til kurv
-//   - false → "Skræddersy BH" → navigerer til onboarding
+// Denne skærm viser detaljer om OneBra™.
+// Logikken her er meget afhængig af 'isTailored' tilstanden fra ProductViewModel.
+//   - Hvis isTailored er false: Brugeren ser en generisk side og knappen "Skræddersy BH".
+//   - Hvis isTailored er true: Brugeren ser deres egne mål og knappen "Føj til kurv".
 @Composable
 fun ProductScreen (
     navController: NavController,
     viewModel: ProductViewModel,
     cartViewModel: CartViewModel
 ) {
+    // Henter dynamisk tekst til knappen fra ViewModel (separation af UI og logik).
+    val btnText = viewModel.getBtnText()
 
-    val btnText = if (viewModel.isTailored) "Føj til Kurv"
-    else "Skræddersy BH"
-
-    Box(// Box som yderste lag så knappen kan flyde oven på scrollindholdet
-              modifier = Modifier
-                  .fillMaxSize()
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
         LazyColumn(// LazyColumn med alle sektioner
             modifier = Modifier
@@ -77,25 +70,20 @@ fun ProductScreen (
         ) {
             item { Header(navController) }
             item { ProductCarousel() }
-            item { ColorSelection(viewModel) }
+            item { ColorSelection(viewModel, navController) }
             item { ProductDescription() }
         }
 
-        Button(// Fastlåst knap i bunden - flyder oven på indholdet
+        // CTA KNAP (Fastgjort i bunden)
+        // Vi placerer den uden for LazyColumn, men inde i Box, så den altid er synlig (sticky).
+        Button(
             onClick = {
-                if (viewModel.isTailored) {
-                    cartViewModel.addItem(
-                        BasketItem(
-                            navn = "OneBra™",
-                            farve = viewModel.choseColor,
-                            pris = "799,00",
-                            billedeRes = R.drawable.productsitemodel1
-                        )
-                    )
-                    navController.navigate("basket")
-                } else {
-                    navController.navigate("tailor_start")
-                }
+                // Vi kalder en funktion i ViewModel, der håndterer navigation og kurv-logik.
+                viewModel.onProductAction(
+                    cartViewModel = cartViewModel,
+                    navigateToBasket = { navController.navigate("basket") },
+                    navigateToTailor = { navController.navigate("tailor_start") }
+                )
             },
             colors = ButtonDefaults.buttonColors(containerColor = ctaColor),
             shape = RoundedCornerShape(50),
@@ -105,26 +93,16 @@ fun ProductScreen (
                 .padding(bottom = 40.dp)
                 .fillMaxWidth(0.6f)
                 .height(50.dp)
-
         ) {
-            Text(text = btnText,
-                color = whiteColor,
-                fontSize = 18.sp
-                )
+            Text(text = btnText, color = whiteColor, fontSize = 18.sp)
         }
-
-
-
-    }//box
-
-
-} //ProductScreen
+    }
+}
 
 
 // ===== HEADER =====
 @Composable
 fun Header (navController: NavController) {
-
     Spacer(modifier = Modifier.height(18.dp))
 
     Column{
@@ -141,7 +119,8 @@ fun Header (navController: NavController) {
                     .clickable{navController.navigate("home")}
                 )
 
-            Image(// Logo navigerer til homescreen ved klik
+            // Logoet i midten fungerer også som genvej til Home.
+            Image(
                 painter = painterResource(id = R.drawable.neveranother_a_logo),
                 contentDescription = "neverAnother A logo",
                 modifier = Modifier
@@ -152,9 +131,8 @@ fun Header (navController: NavController) {
                         navController.navigate("home")
                     },
                 contentScale = ContentScale.Fit
-                )
-        }//Box
-
+            )
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -168,19 +146,9 @@ fun Header (navController: NavController) {
         )
 
         Spacer(modifier = Modifier.height(12.dp))
-
-        Box(// Tynd orange streg under produktnavnet
-            modifier = Modifier
-                .width(60.dp)
-                .height(2.dp)
-                .background(ctaColor)
-                .align(Alignment.CenterHorizontally)
-        )
-
-
-    }    //column
-
-} //Header
+        Box(modifier = Modifier.width(60.dp).height(2.dp).background(ctaColor).align(Alignment.CenterHorizontally))
+    }
+}
 
 
 // ===== PRODUCT CAROUSEL =====
@@ -198,17 +166,15 @@ fun ProductCarousel () {// Swipebar karussel med 9 produktbilleder
         R.drawable.productsitemodel9
     )
 
+    // PagerState husker hvilken side vi er på.
     val carousel = rememberPagerState(pageCount = { pictures.size })
 
-Spacer(modifier = Modifier.height(40.dp))
+    Spacer(modifier = Modifier.height(40.dp))
 
     HorizontalPager(
         state = carousel,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(300.dp),
-        contentPadding =
-            PaddingValues (horizontal = 16.dp),
+        modifier = Modifier.fillMaxWidth().height(300.dp),
+        contentPadding = PaddingValues (horizontal = 16.dp),
         pageSpacing = 8.dp,
         pageSize = PageSize.Fixed(200.dp)// PageSize.Fixed = fast bredde på hvert billede så man kan se flere ad gangen
 
@@ -226,14 +192,9 @@ Spacer(modifier = Modifier.height(40.dp))
 
 // ===== COLOR SELECTION =====
 @Composable
-fun ColorSelection (viewModel: ProductViewModel) {
+fun ColorSelection (viewModel: ProductViewModel, navController: NavController) {
 
-    var showMeasurementsPopUp by remember { mutableStateOf(false) }
-
-   Column(
-       modifier = Modifier
-           .padding(16.dp)
-   ) {
+   Column(modifier = Modifier.padding(16.dp)) {
        Row(
            modifier = Modifier.fillMaxWidth(),
            horizontalArrangement = Arrangement.SpaceBetween,
@@ -245,20 +206,17 @@ fun ColorSelection (viewModel: ProductViewModel) {
                color = blackColor,
                fontSize = 24.sp)
 
-               if (viewModel.isTailored) {// "Se dine mål" knap vises kun når isTailored == true
-                   OutlinedButton(
-                       onClick = {showMeasurementsPopUp = true},
-                       border = BorderStroke(1.dp, ctaColor),
-                       modifier = Modifier
-                           .fillMaxWidth(0.7f)
-                           .height(36.dp)
-                   ) {
-                       Text("Se dine mål", color = ctaColor, fontSize = 18.sp)
-                   }
+           // Denne knap vises kun, hvis brugeren har gennemført skrædder-processen.
+           if (viewModel.isTailored) {
+               OutlinedButton(
+                   onClick = { navController.navigate("result_screen") },
+                   border = BorderStroke(1.dp, ctaColor),
+                   modifier = Modifier.fillMaxWidth(0.7f).height(36.dp)
+               ) {
+                   Text("Se dine mål", color = ctaColor, fontSize = 18.sp)
                }
-       }//Row
-
-
+           }
+       }
 
        Row(horizontalArrangement = Arrangement.spacedBy(8.dp),
            modifier = Modifier.padding(start = 16.dp)
@@ -269,7 +227,7 @@ fun ColorSelection (viewModel: ProductViewModel) {
                    .size(32.dp)
                    .border(
                        width = 2.dp,
-                        color = if (viewModel.choseColor == "White")// Hvid cirkel = "White".
+                        color = if (viewModel.chosenColor == "White")// Hvid cirkel = "White".
                            ctaColor
                        else
                        Color.Transparent,
@@ -277,15 +235,15 @@ fun ColorSelection (viewModel: ProductViewModel) {
                    )
                    .padding(2.dp)
                    .background(Color.White, shape = CircleShape)
-                   .clickable{viewModel.choseColor = "White"}
+                   .clickable{viewModel.chosenColor = "White"}
            )
-// Orange ring vises rundt om valgt farve via border-farve
+           // Sort cirkel
            Box(
                modifier = Modifier
                    .size(32.dp)
                    .border(
                        width = 2.dp,
-                           color = if (viewModel.choseColor == "Black")//sort cirkel = "Black"
+                           color = if (viewModel.chosenColor == "Black")//sort cirkel = "Black"
                                ctaColor
                        else
                        Color.Transparent,
@@ -293,100 +251,32 @@ fun ColorSelection (viewModel: ProductViewModel) {
                    )
                    .padding(2.dp)
                    .background(color = blackColor, shape = CircleShape)
-                   .clickable{viewModel.choseColor = "Black"}// choseColor gemmes i ProductViewModel
+                   .clickable{viewModel.chosenColor = "Black"}// choseColor gemmes i ProductViewModel
            )
        }
-   }//Column
+   }
 }
 
 
 // ===== PRODUCT DESCRIPTION =====
 @Composable
-fun ProductDescription () {// Produktbeskrivelse med overskrift og tekst-afsnit
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(28.dp)
-    ) {
-
-        Text(
-            text = "Mød din nye yndlings-BH",
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold,
-            color = blackColor,
-        )
-
+fun ProductDescription () {
+    Column(modifier = Modifier.fillMaxWidth().padding(28.dp)) {
+        Text(text = "Mød din nye yndlings-BH", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = blackColor)
         Spacer(modifier = Modifier.height(18.dp))
-
-//////////////////////
-
-        Text(
-            text = "Den er skabt ved hjælp af vores specialtilpassede fit-algoritme og skræddersyet til at passe perfekt til dine mål.",
-            fontSize = 18.sp,
-            color = blackColor
-        )
-
+        Text(text = "Den er skabt ved hjælp af vores specialtilpassede fit-algoritme...", fontSize = 18.sp, color = blackColor)
         Spacer(modifier = Modifier.height(12.dp))
-
-//////////////////////
-
-        Text(
-            text = "Det brede bånd giver støtte og stabilitet, så du føler dig tryg hele dagen.",
-            fontSize = 18.sp,
-            color = blackColor
-        )
-
+        Text(text = "Det brede bånd giver støtte og stabilitet...", fontSize = 18.sp, color = blackColor)
         Spacer(modifier = Modifier.height(12.dp))
-
-        /////////////////
-
-
-
-        Text(
-            text = "Den bløde strikkede bøjle løfter og former skånsomt og fremhæver din silhuet uden ubehaget fra en traditionel metalbøjle.",
-            fontSize = 18.sp,
-            color = blackColor
-        )
-
+        Text(text = "Den bløde strikkede bøjle løfter og former skånsomt...", fontSize = 18.sp, color = blackColor)
         Spacer(modifier = Modifier.height(12.dp))
-
-        /////////////////
-
-
-
-        Text(
-            text = "De dobbeltlagede skåle har et ydre lag, der giver struktur og holdbarhed, mens det indre lag er blødt og åndbart.",
-            fontSize = 18.sp,
-            color = blackColor
-        )
-
+        Text(text = "De dobbeltlagede skåle har et ydre lag...", fontSize = 18.sp, color = blackColor)
         Spacer(modifier = Modifier.height(12.dp))
-
-        /////////////////
-
-
-
-        Text(
-            text = "Siderne og ryggen har en luftig struktur, som holder dig kølig og komfortabel.",
-            fontSize = 18.sp,
-            color = blackColor
-        )
-
+        Text(text = "Siderne og ryggen har en luftig struktur...", fontSize = 18.sp, color = blackColor)
         Spacer(modifier = Modifier.height(12.dp))
-
-        /////////////////
-
-
-
-        Text(
-            text = "Har justerbare stropper og tre hægtelukninger på ryggen.",
-            fontSize = 18.sp,
-            color = blackColor
-        )
-
-        Spacer(modifier = Modifier.height(60.dp)) // Spacer i bunden så teksten ikke gemmes bag knappen
-
-    }//column
-
+        Text(text = "Har justerbare stropper og tre hægtelukninger på ryggen.", fontSize = 18.sp, color = blackColor)
+        
+        // Ekstra padding i bunden så teksten ikke bliver dækket af den "flydende" knap.
+        Spacer(modifier = Modifier.height(80.dp)) 
+    }
 }
